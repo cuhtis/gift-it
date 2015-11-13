@@ -75,7 +75,7 @@ var Gift = new mongoose.Schema({
 
 ## Modules
 
-* <b>Passport:<b><br>
+* <b>Passport:</b><br>
 	<b>Description:</b> User authentication<br>
 	<b>Need:</b> Login users to website
 
