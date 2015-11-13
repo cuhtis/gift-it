@@ -8,9 +8,9 @@ Gift It is a web application where users can store gift ideas under certain cate
 
 Gift It will use MongoDB (NoSQL, document-store) as its database.
 
-Gift It will need to store Users, Gifts, as well as category headers of gifts: Type, Occasion and Reason.
+Gift It will need to store Users, Friends, Gifts, as well as category headers of gifts: Type, Occasion and Reason.
 
-* Users will 
+* Users will store Gifts and Friends. 
 
 First draft schema:
 
@@ -31,33 +31,30 @@ var Friend = new mongoose.Schema({
 	name: {type: String, required: true},
 	birthday: [Date],
 	is_user: {type: Boolean, required: true},
-	account: User,
-	gifts: [Gift]
+	account: User
 });
 
 // Type
 var Type = new mongoose.Schema({
-	type: {type: String, required: true},
-	gifts: [Gift]
+	type: {type: String, required: true}
 });
 
 // Occasion
 var Occasion = new mongoose.Schema({
 	occasion: {type: String, required: true},
-	gifts: [Gift]
+	date: Date
 });
 
 // Reason
 var Reason = new mongoose.Schema({
-	reason: {type: String, required: true},
-	gifts: [Gift]
+	reason: {type: String, required: true}
 });
 
 // Gift
 var Gift = new mongoose.Schema({
 	gift_name: String,
 	ext_url: String,
-	gift_who: [User],
+	gift_who: [Friend],
 	gift_what: [Type],
 	gift_when: [Occasion],
 	gift_why: [Reason]
@@ -74,19 +71,20 @@ var Gift = new mongoose.Schema({
 
 ## Sitemap
 
+![site map](img/site-map.png)
+
 ## Modules
 
-* Passport:
-	Description: User authentication
-	Need: Login users to website
+* <b>Passport:<b><br>
+	<b>Description:</b> User authentication<br>
+	<b>Need:</b> Login users to website
 
-* Mongoose:
-	Description: Module to connect to MongoDB
-	Need: Interact with the MongoDB database
+* <b>Mongoose:</b><br>
+	<b>Description:</b> Module to connect to MongoDB<br>
+	<b>Need:</b> Interact with the MongoDB database
 
 Other Add-ons:
 
-* NodeMailer:
-	URL: https://github.com/andris9/Nodemailer
-	Description: NodeMailer is an email module that allows you to send emails through a Node.js application.
-	Need: I will need NodeMailer to send reminder emails to users.
+* <b>NodeMailer</b> (https://github.com/andris9/Nodemailer)<br>
+	<b>Description:</b> NodeMailer is an email module that allows you to send emails through a Node.js application.<br>
+	<b>Need:</b> I will need NodeMailer to send reminder emails to users.
