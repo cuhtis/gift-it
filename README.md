@@ -71,7 +71,7 @@ var Gift = new mongoose.Schema({
 
 ## Sitemap
 
-![site map](img/site-map.png)
+![site map](img/SiteMap.png)
 
 ## Modules
 
