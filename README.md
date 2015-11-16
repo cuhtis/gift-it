@@ -63,6 +63,7 @@ var Gift = new mongoose.Schema({
 
 ## Wireframes
 
+![wireframe](img/Wireframe - Index.png)
 
 ## User Stories
 
