@@ -1,8 +1,26 @@
 body {
-  padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  text-align: center;
+  color: #FFFFFF;
+  background-color: #FF69B4;
 }
 
-a {
-  color: #00B7FF;
+@font-face {
+  font-family: Heracles;
+  src: url(/fonts/Heracles.ttf);
+}
+
+.container {
+  width: 100%;
+  height: 100%;
+  margin: 5px;
+  padding: 5px;
+}
+
+#title {
+  font-size: 15em;
+  margin: 10px;
+  font-family: Heracles;
+
+  background: linear-gradient(rgba(100, 100, 100, 0.3), rgba(100, 100, 100, 0));
 }
