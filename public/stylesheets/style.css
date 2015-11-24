@@ -3,6 +3,9 @@ body {
   text-align: center;
   color: #FFFFFF;
   background-color: #FF69B4;
+  border: 0px;
+  margin: 0px;
+  padding: 0px;
 }
 
 @font-face {
@@ -11,16 +14,36 @@ body {
 }
 
 .container {
+  display: block;
   width: 100%;
   height: 100%;
-  margin: 5px;
-  padding: 5px;
 }
 
 #title {
   font-size: 15em;
-  margin: 10px;
   font-family: Heracles;
 
   background: linear-gradient(rgba(100, 100, 100, 0.3), rgba(100, 100, 100, 0));
+}
+
+#nav {
+  text-align: right;
+  padding: 10px;
+  padding-right: 15px;
+  background-color: rgba(100,100,100,0.3);
+}
+
+a {
+  text-decoration: none;
+  color: #FFFFFF;
+}
+
+div {
+  display: block;
+}
+
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
 }

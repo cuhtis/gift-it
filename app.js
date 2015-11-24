@@ -4,7 +4,15 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var passport = require('passport');
 
+// Database
+require('./db/db');
+
+// Authentication
+require('./auth.js');
+
+// Routes
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var gifts = require('./routes/gift');
@@ -22,6 +30,22 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+var session = require('express-session');
+var sessionOptions = {
+    secret: 'secret cookie thang (store this elsewhere!)',
+      resave: true,
+        saveUninitialized: true
+};
+app.use(session(sessionOptions));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.use(function(req, res, next){
+    res.locals.user = req.user;
+      next();
+});
 
 app.use('/', routes);
 app.use('/user', users);

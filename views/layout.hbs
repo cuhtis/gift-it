@@ -2,9 +2,23 @@
 <html>
   <head>
     <title>{{title}}</title>
+    <link rel='stylesheet' href='/stylesheets/reset.css' />
+    <link href="stylesheets/bootstrap.css" rel="stylesheet" media="screen">
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
   <body>
-    {{{body}}}
+    <script src="javascript/bootstrap.js"></script>
+    <div class="container">
+      <div id="nav">
+        {{#if user}}
+        Logged in as {{user.username}} (<a href="/logout">Logout</a>) 
+        {{else}}
+        <a href="/login">Login</a>&emsp;<a href="/register">Register</a>
+        {{/if}}
+      </div>
+    </div>
+    <div class="container">
+      {{{body}}}
+    </div>
   </body>
 </html>
