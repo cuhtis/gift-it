@@ -1,7 +1,13 @@
+$font-stack: "Lucida Grande", Helvetica, Arial, sans-serif;
+$primary-colour: #FFFFFF;
+$secondary-colour: #000000;
+
+@import 'reset';
+
 body {
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  font: 14px $font-stack;
   text-align: center;
-  color: #FFFFFF;
+  color: $primary-colour;
   background-color: #FF69B4;
   border: 0px;
   margin: 0px;
@@ -19,10 +25,9 @@ body {
   height: 100%;
 }
 
-#title {
+.title {
   font-size: 15em;
   font-family: Heracles;
-
   background: linear-gradient(rgba(100, 100, 100, 0.3), rgba(100, 100, 100, 0));
 }
 
@@ -31,6 +36,38 @@ body {
   padding: 10px;
   padding-right: 15px;
   background-color: rgba(100,100,100,0.3);
+}
+
+.body {
+  padding-top: 10px;
+}
+
+.error {
+  color: #990000;
+}
+
+form {
+  .box {
+    display: table;
+    margin: auto;
+  }
+
+  p {
+    display: table-row;
+  }
+
+  label { 
+    display: table-cell;
+    text-align: right;
+    margin: 5px;
+    padding: 5px;
+  }
+
+  input {
+    display: table-cell;
+    margin: 5px;
+    padding: 5px;
+  }
 }
 
 a {

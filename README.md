@@ -58,6 +58,15 @@ var List = new mongoose.Schema({
 
 ![site map](img/SiteMap.png)
 
+## Topics
+
+* Authentication (3 pts)
+* Pre-built Express templates (1 pts)
+* CSS Preprocessor - SASS (1 pts)
+* CSS Framework (1 pts)
+* Server-side JS Library - NodeMailer (1 pts)
+* Server-side JS Library - TBD (1 pts)
+
 ## Modules
 
 * <b>Passport:</b><br>

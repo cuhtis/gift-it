@@ -5,7 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var passport = require('passport');
-
+var sass = require('node-sass-middleware');
 // Database
 require('./db/db');
 
@@ -29,13 +29,23 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+app.use(sass({
+  src: path.join(__dirname, 'sass'),
+  dst: path.join(__dirname, 'public/stylesheets'),
+  prefix: '/stylesheets/',
+  debug: true,
+  force: true,
+  outputStyle: 'compressed'
+}));
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 var session = require('express-session');
 var sessionOptions = {
-    secret: 'secret cookie thang (store this elsewhere!)',
-      resave: true,
-        saveUninitialized: true
+  secret: 'secret cookie thang (store this elsewhere!)',
+  resave: true,
+  saveUninitialized: true
 };
 app.use(session(sessionOptions));
 
@@ -43,8 +53,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(function(req, res, next){
-    res.locals.user = req.user;
-      next();
+  res.locals.user = req.user;
+  next();
 });
 
 app.use('/', routes);
