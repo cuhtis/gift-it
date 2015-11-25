@@ -19,45 +19,29 @@ First draft schema:
 // * our site requires authentication so users have a username and password
 var User = new mongoose.Schema({
 	// username, password provided by plugin
-	display_name: {type: String, required: true},
+	display_name: String,
 	email: String,
-	friends: [Friend],
-	gifts: [Gift],
-	wishlist: [Gift]
-});
-
-// Friend
-var Friend = new mongoose.Schema({
-	name: {type: String, required: true},
-	birthday: [Date],
-	is_user: {type: Boolean, required: true},
-	account: User
-});
-
-// Type
-var Type = new mongoose.Schema({
-	type: {type: String, required: true}
-});
-
-// Occasion
-var Occasion = new mongoose.Schema({
-	occasion: {type: String, required: true},
-	date: Date
-});
-
-// Reason
-var Reason = new mongoose.Schema({
-	reason: {type: String, required: true}
+	friends: [{
+    name: String,
+    birthday: Date,
+    account: User,
+    gifts: List
+  }],
+	wishlist: List
 });
 
 // Gift
 var Gift = new mongoose.Schema({
 	gift_name: String,
-	ext_url: String,
-	gift_who: [Friend],
-	gift_what: [Type],
-	gift_when: [Occasion],
-	gift_why: [Reason]
+  price: Number,
+	url: String,
+});
+
+// List
+var List = new mongoose.Schema({
+  list_owner: User,
+  list_for: User,
+  gifts: [Gift]
 });
 ```
 

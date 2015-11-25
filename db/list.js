@@ -1,8 +1,8 @@
 var mongoose = require('mongoose');
 
 var List = new mongoose.Schema({
-  owner: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
-  recipient: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+  list_owner: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+  list_for: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
   gifts: [{
     gift: {type: mongoose.Schema.Types.ObjectId, ref: 'Gift'},
     reason: String,
