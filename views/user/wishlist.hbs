@@ -1,0 +1,17 @@
+<div class="title">
+{{account.display_name}}'s Wishlist
+</div>
+<div class="body">
+<ul>
+  {{#if gifts}}
+    {{#each gifts}}
+    <li>{{thi}}</li>
+    {{/each}}
+  {{else}}
+    Wishlist is empty.
+  {{/if}}
+</ul>
+{{#if myAccount}}
+  <a href="wishlist/add">Add an item to your wishlist!</a>
+{{/if}}
+</div>

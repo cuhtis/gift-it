@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>{{title}}</title>
+    <title>Gift It - {{title}}</title>
     <link href="stylesheets/bootstrap.css" rel="stylesheet" media="screen">
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
   <body>
     <div class="container" id="nav">
       {{#if user}}
-      Logged in as {{user.username}} (<a href="/logout">Logout</a>) 
+      Logged in as {{user.display_name}} (<a href="/logout">Logout</a>) 
       {{else}}
       <a href="/login">Login</a>&emsp;<a href="/register">Register</a>
       {{/if}}

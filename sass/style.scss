@@ -2,7 +2,18 @@ $font-stack: "Lucida Grande", Helvetica, Arial, sans-serif;
 $primary-colour: #FFFFFF;
 $secondary-colour: #000000;
 
-@import 'reset';
+@mixin vertical-center ($position: relative) {
+  position: $position;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -moz-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+@font-face {
+  font-family: Heracles;
+  src: url(/fonts/Heracles.ttf);
+}
 
 body {
   font: 14px $font-stack;
@@ -14,11 +25,6 @@ body {
   padding: 0px;
 }
 
-@font-face {
-  font-family: Heracles;
-  src: url(/fonts/Heracles.ttf);
-}
-
 .container {
   display: block;
   width: 100%;
@@ -26,9 +32,13 @@ body {
 }
 
 .title {
-  font-size: 15em;
+  font-size: 8em;
   font-family: Heracles;
   background: linear-gradient(rgba(100, 100, 100, 0.3), rgba(100, 100, 100, 0));
+}
+
+.main {
+  font-size: 15em;
 }
 
 #nav {
@@ -61,6 +71,7 @@ form {
     text-align: right;
     margin: 5px;
     padding: 5px;
+    
   }
 
   input {

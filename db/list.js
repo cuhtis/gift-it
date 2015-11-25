@@ -5,8 +5,7 @@ var List = new mongoose.Schema({
   list_for: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
   gifts: [{
     gift: {type: mongoose.Schema.Types.ObjectId, ref: 'Gift'},
-    reason: String,
-    date: Date
+    reason: [String]
   }]
 });
 
