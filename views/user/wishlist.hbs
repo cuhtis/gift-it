@@ -1,7 +1,8 @@
 <div class="body">
+<h4>Wishlist</h4>
 <div class="list">
   {{#if gifts}}
-    Last updated: {{last_update}}
+    <p>Last updated: {{#if last_update}}{{last_update}}{{else}}N/A{{/if}}</p>
     <ul>
       {{#each gifts}}
       <li>{{this.name}}</li>

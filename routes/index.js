@@ -138,4 +138,14 @@ router.post('/settings', function(req, res, next) {
   });
 });
 
+router.get('/change_password', function(req, res, next) {
+  if (!req.user) res.redirect('/login');
+  else {
+    res.render('change_password', {
+      title: "Change Password",
+      page_title: "Change Password"
+    });
+  }
+});
+
 module.exports = router;

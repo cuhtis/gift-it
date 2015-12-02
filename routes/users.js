@@ -16,10 +16,12 @@ router.get('/', function(req, res, next) {
 
 router.get('/:username', function(req, res, next) {
   User.findOne({'username': req.params.username}, function(err, user) {
+    var isMine = (req.params.username == user.username);
     res.render('user/profile', {
-      title: user.first_name + "'s Profile",
-      page_title: user.first_name + "'s Profile",
+      title: isMine ? "My Account" : user.first_name + "'s Profile",
+      page_title: isMine ? "My Account" : user.first_name + "'s Profile",
       account: user,
+      myAccount: isMine,
       age: Math.floor(((new Date()) - (new Date(user.birthday)))/(1000 * 3600 * 24 * 365))
     });
   });
@@ -27,7 +29,6 @@ router.get('/:username', function(req, res, next) {
 
 router.get('/:username/wishlist', function(req, res, next) {
   User.findOne({'username': req.params.username}, function(err, user) {
-    var isMine = (req.params.username == user.username);
     List.findOne({ '_id': user.wishlist }, function(err, wishlist) {
       var idList = wishlist.gifts.map(function(item) {
         return item.gift;
@@ -37,7 +38,7 @@ router.get('/:username/wishlist', function(req, res, next) {
           title: user.first_name + "'s Wishlist",
           page_title: user.first_name + "'s Wishlist",
           account: user,
-          myAccount: isMine,
+          myAccount: (req.params.username == user.username),
           gifts: giftList
         });
       });

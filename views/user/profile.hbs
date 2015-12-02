@@ -1,10 +1,17 @@
 <div class="body">
-  <table>
-    <tr><td class="col1">Name</td><td>{{user.first_name}} {{user.last_name}}</td></tr>
-    <tr><td class="col1">Email</td><td>{{user.email}}</td></tr>
-    <tr><td class="col1">Birthday</td><td>{{user.birthday}}</td></tr>
-    <tr><td class="col1">Age</td><td>{{age}}</td></tr>
-  </table>
-  <br>
-  <a href="/user/{{account.username}}/wishlist">View {{account.first_name}}'s wishlist</a>
+<h4>{{user.username}}</h4>
+<table>
+  <tr><td class="col1">Name</td><td>{{user.first_name}} {{user.last_name}}</td></tr>
+  <tr><td class="col1">Email</td><td>{{user.email}}</td></tr>
+  <tr><td class="col1">Birthday</td><td>{{user.birthday}}</td></tr>
+  <tr><td class="col1">Age</td><td>{{age}}</td></tr>
+</table>
+<br>
+{{#if myAccount}}
+<p><a href="/user/{{account.username}}/wishlist">View my wishlist</a></p>
+<p><a href="/settings">Update account information</a></p>
+<p><a href="/change_password">Change password</a></p>
+{{else}}
+<p><a href="/user/{{account.username}}/wishlist">View {{account.first_name}}'s wishlist</a></p>
+{{/if}}
 </div>
