@@ -18,7 +18,7 @@ router.get('/gift', function(req, res, next) {
   res.render('search/gift', {
     title: 'Search by Gift',
     page_title: 'Search by Gift',
-    account: user
+    account: req.user
   });
 });
 

@@ -83,23 +83,31 @@ form {
   .box {
     display: table;
     margin: auto;
-  }
+  
+    p {
+      display: table-row;
+    }
 
-  p {
-    display: table-row;
-  }
+    label { 
+      display: table-cell;
+      text-align: right;
+      margin: 5px;
+      padding: 5px;
+    }
 
-  label { 
-    display: table-cell;
-    text-align: right;
-    margin: 5px;
-    padding: 5px; 
-  }
+    input {
+      display: table-cell;
+      margin: 5px;
+      padding: 5px;
+    }
 
-  input {
-    display: table-cell;
-    margin: 5px;
-    padding: 5px;
+    select {
+      display: table-cell;
+      margin: 5px;
+      padding: 5px;
+      width: 206px;
+      height: 20px;
+    }
   }
 }
 
@@ -115,6 +123,12 @@ table {
   .col1 {
     text-align: right;
     color: $primary-colour;
+    font-weight: bold;
+  }
+
+  .header > td {
+    color: $primary-colour;
+    font-weight: bold;
   }
 }
 

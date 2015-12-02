@@ -1,13 +1,31 @@
 <div class="body">
-<p>
-  Search by:&emsp;<a></a>
-</p>
+<p><strong>
+  Search by:&emsp;<a>Occasion</a>&emsp;<a>Type</a>&emsp;<a>Relationship</a>
+</strong></p>
 <form method="POST">
   <div class="box">
     <p>
-      <label for="search_query">Search:</label>
-      <input name="search_query" type="text">
+      <input name="search_query" type="search">
+      <input class="btn" type="submit" value="Search">
     </p>
   </div>
 </form> 
+{{#if result}}
+<div class="search_results">
+  <table>
+    <tr class="header">
+      <td>Gift</td>
+      <td>Price</td>
+      <td>Link</td>
+    </tr>
+    {{#each result}}
+    <tr>
+      <td>{{this.gift}}</td>
+      <td>{{this.price}}</td>
+      <td>{{this.link}}</td>
+    </tr>
+    {{/each}}
+  </table>
+</div>
+{{/if}}
 </div>

@@ -30,6 +30,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/login', function(req, res, next) {
+  // TODO: Coming from URL redirect
   if (req.user) res.redirect('/list');
   else res.render('login', {
     title: "Login",
@@ -146,6 +147,11 @@ router.get('/change_password', function(req, res, next) {
       page_title: "Change Password"
     });
   }
+});
+
+router.post('/change_password', function(req, res, next) {
+  // TODO
+  res.redirect('/');
 });
 
 module.exports = router;

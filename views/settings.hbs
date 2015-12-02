@@ -27,9 +27,26 @@
     <br>
     <p>
       <label for="notify_me">Notifications:</label>
-      <input name="notify_me" type="checkbox" value="{{user.options.notify_me}}">
+      <select name="notify_me">
+        <option value="on">On</option>
+        <option value="off">Off</option>
+      </select>
+    </p>
+    <p>
+      <label for="notify_time">Notify me:</label>
+      <select name="notify_time">
+        <option value="0">On the Day</option>
+        <option value="1">1 Day Before</option>
+        <option value="2">2 Days Before</option>
+        <option value="3">3 Days Before</option>
+        <option value="5">5 Days Before</option>
+        <option value="7">1 Week Before</option>
+        <option value="14">2 Weeks Before</option>
+        <option value="21">3 Weeks Before</option>
+      </select>
     </p>
   </div>
+  <br>
   <input class="btn" type="submit" value="Update">
 </form>
 <p><a href="/change_password">Change password</a></p>
