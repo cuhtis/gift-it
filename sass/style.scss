@@ -1,6 +1,10 @@
 $font-stack: "Lucida Grande", Helvetica, Arial, sans-serif;
 $primary-colour: #FFFFFF;
-$secondary-colour: #000000;
+$secondary-colour: #E0E0E0;
+$error-colour: #990000;
+$background-colour: #003366;
+$gradient-colour1: rgba(255, 255, 255, 0.3);
+$gradient-colour2: rgba(255, 255, 255, 0);
 
 @mixin vertical-center ($position: relative) {
   position: $position;
@@ -19,7 +23,7 @@ body {
   font: 14px $font-stack;
   text-align: center;
   color: $primary-colour;
-  background-color: #FF69B4;
+  background-color: $background-colour;
   border: 0px;
   margin: 0px;
   padding: 0px;
@@ -34,18 +38,28 @@ body {
 .title {
   font-size: 8em;
   font-family: Heracles;
-  background: linear-gradient(rgba(100, 100, 100, 0.3), rgba(100, 100, 100, 0));
+  background: linear-gradient($gradient-colour1, $gradient-colour2);
 }
 
 .main {
   font-size: 15em;
 }
 
-#nav {
+#user_info {
   text-align: right;
   padding: 10px;
   padding-right: 15px;
-  background-color: rgba(100,100,100,0.3);
+  background-color: $gradient-colour1;
+  
+  a {
+    color: $primary-colour;
+  }
+}
+
+#nav {
+  a {
+    color: $primary-colour;
+  }
 }
 
 .body {
@@ -53,7 +67,16 @@ body {
 }
 
 .error {
-  color: #990000;
+  color: $error-colour;
+}
+
+ul {
+  li {
+    text-align: center;
+    list-style: none;
+    font-style: italic;
+    color: $secondary-colour;
+  }
 }
 
 form {
@@ -70,8 +93,7 @@ form {
     display: table-cell;
     text-align: right;
     margin: 5px;
-    padding: 5px;
-    
+    padding: 5px; 
   }
 
   input {
@@ -81,9 +103,29 @@ form {
   }
 }
 
+table {
+  margin: auto;
+  text-align: left;
+  color: $secondary-colour;
+
+  td {
+    padding: 5px;
+  }
+
+  .col1 {
+    text-align: right;
+    color: $primary-colour;
+  }
+}
+
 a {
   text-decoration: none;
-  color: #FFFFFF;
+  color: $secondary-colour;
+}
+
+a:hover {
+  text-decoration: none;
+  color: $primary-colour;
 }
 
 div {

@@ -7,12 +7,20 @@ var User = mongoose.model('User');
 var List = mongoose.model('List');
 
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Home' });
+  res.render('index', {
+    title: 'Home',
+    page_title: 'Gift It',
+    main: true
+  });
 });
 
 router.get('/login', function(req, res, next) {
   if (req.user) res.redirect('/list');
-  else res.render('login', { title: "Login" });
+  else res.render('login', {
+    title: "Login",
+    page_title: "Login",
+    show_nav: false
+  });
 });
 
 router.post('/login', function(req, res, next) {
@@ -22,21 +30,35 @@ router.post('/login', function(req, res, next) {
         res.redirect('/');
       });
     } else {
-      res.render('login', { title: "Login", message:'Your login or password is incorrect.' });
+      res.render('login', {
+        title: "Login",
+        page_title: "Login",
+        show_nav: false,
+        message:'Your login or password is incorrect.'
+      });
     }          
   })(req, res, next);
 });
 
 router.get('/register', function(req, res, next) {
   if (req.user) res.redirect('/list');
-  else res.render('register', { title: "Register" });
+  else res.render('register', {
+    title: "Register",
+    page_title: "Register",
+    show_nav: false
+  });
 });
 
 router.post('/register', function(req, res, next) {
   User.register(new User({username:req.body.username, display_name:req.body.display_name, email:req.body.email}), req.body.password, function(err, user){
     if (err) {
       console.log(err);
-      res.render('register',{ title: "Register", message:'Your registration information is not valid' });
+      res.render('register',{
+        title: "Register",
+        page_title: "Register",
+        show_nav: false,
+        message:'Your registration information is not valid'
+      });
     } else {
       passport.authenticate('local')(req, res, function() {
         var wishlist = new List({
@@ -61,7 +83,10 @@ router.get('/logout', function(req, res, next) {
 });
 
 router.get('/settings', function(req, res, next) {
-  res.render('settings', {title: "Settings"});
+  res.render('settings', {
+    title: "Settings",
+    page_title: "Settings"
+  });
 });
 
 module.exports = router;

@@ -1,6 +1,10 @@
-<div class="title">
-{{account.display_name}}
-</div>
 <div class="body">
-<a href="/user/{{account.username}}/wishlist">View {{account.display_name}}'s wishlist</a>
+  <table>
+    <tr><td class="col1">Name</td><td>{{#if user.display_name}}{{user.display_name}}{{else}}N/A{{/if}}</td></tr>
+    <tr><td class="col1">Email</td><td>{{#if user.email}}{{user.email}}{{else}}N/A{{/if}}</td></tr>
+    <tr><td class="col1">Birthday</td><td>{{#if user.birthday}}{{user.birthday}}{{else}}N/A{{/if}}</td></tr>
+    <tr><td class="col1">Age</td><td>{{#if user.age}}{{user.age}}{{else}}N/A{{/if}}</td></tr>
+  </table>
+  <br>
+  <a href="/user/{{account.username}}/wishlist">View {{account.display_name}}'s wishlist</a>
 </div>

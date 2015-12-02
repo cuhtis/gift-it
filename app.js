@@ -16,6 +16,7 @@ require('./auth.js');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var gifts = require('./routes/gift');
+var search = require('./routes/search');
 
 var app = express();
 
@@ -54,12 +55,15 @@ app.use(passport.session());
 
 app.use(function(req, res, next){
   res.locals.user = req.user;
+  res.locals.main = false;
+  res.locals.show_nav = true;
   next();
 });
 
 app.use('/', routes);
 app.use('/user', users);
 app.use('/gift', gifts);
+app.use('/search', search);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -77,7 +81,9 @@ if (app.get('env') === 'development') {
     res.status(err.status || 500);
     res.render('error', {
       message: err.message,
-      error: err
+      error: err,
+      title: err.status + ' Error',
+      page_title: err.status + ' Error'
     });
   });
 }
@@ -88,7 +94,10 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error', {
     message: err.message,
-    error: {}
+    error: {},
+    title: 'Error',
+    page_title: 'Error',
+    main: true
   });
 });
 

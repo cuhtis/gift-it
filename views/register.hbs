@@ -1,29 +1,26 @@
-<div class="title">
-Register
-</div>
 <div class="body">
 <h4 class="error">{{ message }}</h4>
 <form method="POST">
   <div class="box">
     <p>
       <label for="username">Username:</label>
-      <input name="username" type="text">
+      <input name="username" type="text" required>
     </p>
     <p>
       <label for="display_name">Name:</label>
-      <input name="display_name" type="text">
+      <input name="display_name" type="text" required>
     </p>
     <p>
       <label for="email">Email:</label>
-      <input name="email" type="email">
+      <input name="email" type="email" required>
     </p>
     <p>
       <label for="password">Password:</label>
-      <input name="password" type="password">
+      <input name="password" type="password" required>
     </p>
   </div>
   <input class="btn" type="submit" value="Register">
 </form>
 <br>
-Already have an account? <a href="/login">Login</a>
+<p>Already have an account? <a href="/login">Login</a></p>
 </div>
