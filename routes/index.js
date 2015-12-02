@@ -2,6 +2,21 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
 var passport = require('passport');
+var nodemailer = require('nodemailer');
+var hbs_mail = require('nodemailer-express-handlebars');
+
+var transporter = nodemailer.createTransport({
+  service: 'Gmail',
+  auth: {
+    user: 'gift.it.no.reply@gmail.com',
+    pass: 'giftit12'
+  }
+});
+
+transporter.use('compile', hbs_mail({
+  viewPath: 'emails/',
+  extName: '.hbs'
+}));
 
 var User = mongoose.model('User');
 var List = mongoose.model('List');
@@ -50,7 +65,13 @@ router.get('/register', function(req, res, next) {
 });
 
 router.post('/register', function(req, res, next) {
-  User.register(new User({username:req.body.username, display_name:req.body.display_name, email:req.body.email}), req.body.password, function(err, user){
+  User.register(new User({
+    username: req.body.username,
+    first_name: req.body.first_name,
+    last_name: req.body.last_name,
+    email: req.body.email,
+    birthday: req.body.birthday 
+  }), req.body.password, function(err, user){
     if (err) {
       console.log(err);
       res.render('register',{
@@ -69,6 +90,18 @@ router.post('/register', function(req, res, next) {
         wishlist.save(function() {  
           user.wishlist = wishlist._id;      
           user.save(function() {
+            transporter.sendMail({
+              from: 'gift.it.no.reply@gmail.com',
+              to: user.email,
+              subject: 'Welcome to Gift It!',
+              template: 'first_join',
+              context: {
+                name: user.first_name
+              }
+            }, function (err, info) {
+              if (err) return console.log(error); 
+              console.log('Message sent', info.response);
+            });
             res.redirect('/');
           });
         });
@@ -83,9 +116,25 @@ router.get('/logout', function(req, res, next) {
 });
 
 router.get('/settings', function(req, res, next) {
-  res.render('settings', {
-    title: "Settings",
-    page_title: "Settings"
+  if (!req.user) res.redirect('/login');
+  else {
+    res.render('settings', {
+      title: "Settings",
+      page_title: "Settings"
+    });
+  }
+});
+
+router.post('/settings', function(req, res, next) {
+  console.log(req.body.birthday);
+  User.findOneAndUpdate({ 'username': req.user.username }, {
+    'first_name': req.body.first_name,
+    'last_name': req.body.last_name,
+    'email': req.body.email,
+    'birthday': req.body.birthday
+  }, function (err, user) {
+    console.log(user);
+    res.redirect('/');
   });
 });
 

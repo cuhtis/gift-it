@@ -9,7 +9,7 @@
     <div class="container">
       <div id="user_info">
         {{#if user}}
-        Logged in as {{user.display_name}} (<a href="/logout">Logout</a>) 
+        Logged in as {{user.first_name}} {{user.last_name}} (<a href="/logout">Logout</a>) 
         {{else}}
         <a href="/login">Login</a>&emsp;<a href="/register">Register</a>
         {{/if}}

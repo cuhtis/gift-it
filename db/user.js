@@ -3,11 +3,16 @@ var passportLocalMongoose = require('passport-local-mongoose');
 var URLSlugs = require('mongoose-url-slugs');
 
 var UserSchema = new mongoose.Schema({
-  display_name: {type: String, required: true},
+  first_name: {type: String, required: true},
+  last_name: {type: String, required: false},
   email: {type: String, required: true},
-  birthday: {type: Date, required: false},
+  birthday: {type: String, required: true},
   friends: [{type: mongoose.Schema.Types.ObjectId, ref: 'Friend'}],
-  wishlist: {type: mongoose.Schema.Types.ObjectId, ref: 'List'}
+  wishlist: {type: mongoose.Schema.Types.ObjectId, ref: 'List'},
+  options: {
+    notify: {type: Boolean, default: true},
+    notify_time: {type: Number, default: 3}
+  }
 });
 
 UserSchema.plugin(passportLocalMongoose);

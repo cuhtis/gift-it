@@ -1,3 +1,30 @@
 <div class="body">
-  Setting Options
+<h4>Update account information</h4>
+<h4 class="error">{{ message }}</h4>
+<form method="POST">
+  <div class="box">
+    <p>
+      <label for="password">Password:</label>
+      <input name="password" type="password" required>
+    </p>
+    <br>
+    <p>
+      <label for="first_name">First Name:</label>
+      <input name="first_name" type="text" value="{{user.first_name}}" required>
+    </p>
+    <p>
+      <label for="last_name">Last Name:</label>
+      <input name="last_name" type="text" value="{{user.last_name}}" required>
+    </p>
+    <p>
+      <label for="email">Email:</label>
+      <input name="email" type="email" value="{{user.email}}" required>
+    </p>
+    <p>
+      <label for="birthday">Date of Birth:</label>
+      <input name="birthday" type="date" value="{{user.birthday}}" required>
+    </p>
+  </div>
+  <input class="btn" type="submit" value="Update">
+</form>
 </div>
