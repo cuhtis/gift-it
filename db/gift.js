@@ -2,7 +2,9 @@ var mongoose = require('mongoose');
 
 var Gift = new mongoose.Schema({
   name: {type: String, required: true},
-  url: {type: String, required: false}
+  price: {type: Number, required: false},
+  url: {type: String, required: false},
+  tags: [{type: mongoose.Schema.Types.ObjectId, ref: 'Tag'}]
 });
 
 mongoose.model('Gift', Gift);
