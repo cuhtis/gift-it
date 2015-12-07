@@ -22,9 +22,7 @@
     <tr>
       <td>
           {{#if this.name}}
-            {{#if this.url}}
-              <a href="{{this.url}}">{{this.name}}</a>
-            {{else}}{{this.name}}{{/if}}
+            <a href="/gift/info?id={{this._id}}">{{this.name}}</a>
           {{else}}N/A{{/if}}
       </td>
       <td>{{#if this.price}}{{this.price}}{{else}}N/A{{/if}}</td>
