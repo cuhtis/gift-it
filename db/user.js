@@ -8,7 +8,9 @@ var UserSchema = new mongoose.Schema({
   email: {type: String, required: true},
   birthday: {type: String, required: true},
   friends: [{type: mongoose.Schema.Types.ObjectId, ref: 'Friend'}],
-  wishlist: {type: mongoose.Schema.Types.ObjectId, ref: 'List'},
+  giftlist: {type: mongoose.Schema.Types.ObjectId, ref: 'List', required: true},
+  wishlist: {type: mongoose.Schema.Types.ObjectId, ref: 'List', required: true},
+  lists: [{type: mongoose.Schema.Types.ObjectId, ref: 'List'}],
   options: {
     notify_me: {type: Boolean, default: true},
     notify_time: {type: Number, default: 3}

@@ -14,8 +14,54 @@ router.get('/', function(req, res, next) {
   }
 });
 
+router.get('/gifts', function(req, res, next) {
+  if (!req.user) res.redirect('/login');
+  else {
+    User.findOne({ 'username': req.user.username }, function (err, user) {
+      if (user.giftList) {
+        List.findOne({ '_id': user.giftlist }, function (err, giftList) {
+          var idList = giftList.gifts.map(function (ele) {
+            return ele.gift;
+          });
+          Gift.find({ '_id': { $in: idlist } }, function (err, gifts) {
+            res.render('user/gift', {
+              title: "My Gifts",
+              page_title: "My Gifts",
+              gifts: gifts
+            });
+          });
+        });
+      } else {
+        var list = new List({
+          list_name: "Public List",
+          list_owner: user._id,
+          gifts: []
+        });
+        list.save(function() {
+          res.render('user/gift', {
+            title: "My Gifts",
+            page_title: "My Gifts",
+            gifts: []
+          });
+        });
+      }
+    });
+  }
+});
+
+router.get('/gifts/add', function(req, res, next) {
+  if (!req.user) res.redirect('/login');
+  else {
+    res.render('user/gift_add', {
+      title: "Add Gift",
+      page_title: "Add Gift"
+    });
+  }
+});
+
 router.get('/:username', function(req, res, next) {
   User.findOne({'username': req.params.username}, function(err, user) {
+    if (err) next();
     var isMine = (req.params.username == user.username);
     res.render('user/profile', {
       title: isMine ? "My Account" : user.first_name + "'s Profile",
@@ -29,30 +75,51 @@ router.get('/:username', function(req, res, next) {
 
 router.get('/:username/wishlist', function(req, res, next) {
   User.findOne({'username': req.params.username}, function(err, user) {
-    List.findOne({ '_id': user.wishlist }, function(err, wishlist) {
-      var idList = wishlist.gifts.map(function(item) {
-        return item.gift;
+    if (user.wishlist) {
+      List.findOne({ '_id': user.wishlist }, function(err, wishlist) {
+        var idList = wishlist.gifts.map(function(item) {
+          return item.gift;
+        });
+        Gift.find({ '_id': { $in : idList } }, function(err, giftList) {
+          res.render('user/wishlist', {
+            title: user.first_name + "'s Wishlist",
+            page_title: user.first_name + "'s Wishlist",
+            account: user,
+            myAccount: (req.params.username == user.username),
+            results: giftList
+          });
+        });
       });
-      Gift.find({ '_id': { $in : idList } }, function(err, giftList) {
+    } else {
+      var wishlist = new List({
+        list_owner: user._id,
+        gifts: []
+      });
+      wishlist.save(function() {
         res.render('user/wishlist', {
           title: user.first_name + "'s Wishlist",
           page_title: user.first_name + "'s Wishlist",
           account: user,
           myAccount: (req.params.username == user.username),
-          gifts: giftList
+          results: []
         });
       });
-    });
+    }
   });
 });
 
 router.get('/:username/wishlist/add', function(req, res, next) {
-  res.render('user/wishlist_add', {
-    title: "Add to Wishlist",
-    page_title: "Add to Wishlist",
-    show_nav: false
-  });
-});
+  if (!req.user) res.redirect('login');
+  else {
+    if (req.user.username != req.params.username)
+      res.redirect('/unauth');
+    res.render('user/wishlist_add', {
+      title: "Add to Wishlist",
+      page_title: "Add to Wishlist",
+      show_nav: false
+    });
+  }
+}); 
 
 router.post('/:username/wishlist/add', function(req, res, next) {
   // TODO: Error catching/bad input

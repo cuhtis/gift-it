@@ -30,13 +30,17 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/login', function(req, res, next) {
-  // TODO: Coming from URL redirect
   if (req.user) res.redirect('/list');
-  else res.render('login', {
-    title: "Login",
-    page_title: "Login",
-    show_nav: false
-  });
+  else {
+    var error = "";
+    if (req.query.error === "invalid") error = "Your username or password is incorrect.";
+    res.render('login', {
+      title: "Login",
+      page_title: "Login",
+      show_nav: false,
+      message: error
+    });
+  }
 });
 
 router.post('/login', function(req, res, next) {
@@ -46,26 +50,31 @@ router.post('/login', function(req, res, next) {
         res.redirect('/');
       });
     } else {
-      res.render('login', {
-        title: "Login",
-        page_title: "Login",
-        show_nav: false,
-        message:'Your login or password is incorrect.'
-      });
+      res.redirect('/login?error=invalid');
     }          
   })(req, res, next);
 });
 
 router.get('/register', function(req, res, next) {
   if (req.user) res.redirect('/list');
-  else res.render('register', {
-    title: "Register",
-    page_title: "Register",
-    show_nav: false
-  });
+  else {
+    var error = "";
+    if (req.query.error === "verify_pw") error = error + "Passwords must match. ";
+    if (req.query.error === "invalid") error = error + "Your registration information is invalid. ";
+    res.render('register', {
+      title: "Register",
+      page_title: "Register",
+      show_nav: false,
+      message: error
+    });
+  }
 });
 
 router.post('/register', function(req, res, next) {
+  if (req.body.password !== req.body.verify_password) {
+    res.redirect('/register?error=verify_pw');
+    return;
+  }
   User.register(new User({
     username: req.body.username,
     first_name: req.body.first_name,
@@ -75,37 +84,22 @@ router.post('/register', function(req, res, next) {
   }), req.body.password, function(err, user){
     if (err) {
       console.log(err);
-      res.render('register',{
-        title: "Register",
-        page_title: "Register",
-        show_nav: false,
-        message:'Your registration information is not valid'
-      });
+      res.redirect('/register?error=invalid');
     } else {
       passport.authenticate('local')(req, res, function() {
-        var wishlist = new List({
-          list_owner: user._id,
-          list_for: user._id,
-          gifts: []
+        transporter.sendMail({
+          from: 'gift.it.no.reply@gmail.com',
+          to: user.email,
+          subject: 'Welcome to Gift It!',
+          template: 'first_join',
+          context: {
+            name: user.first_name
+          }
+        }, function (err, info) {
+          if (err) return console.log(error); 
+          console.log('Message sent', info.response);
         });
-        wishlist.save(function() {  
-          user.wishlist = wishlist._id;      
-          user.save(function() {
-            transporter.sendMail({
-              from: 'gift.it.no.reply@gmail.com',
-              to: user.email,
-              subject: 'Welcome to Gift It!',
-              template: 'first_join',
-              context: {
-                name: user.first_name
-              }
-            }, function (err, info) {
-              if (err) return console.log(error); 
-              console.log('Message sent', info.response);
-            });
-            res.redirect('/');
-          });
-        });
+        res.redirect('/');
       });
     }      
   });

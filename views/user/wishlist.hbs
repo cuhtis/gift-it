@@ -1,18 +1,32 @@
 <div class="body">
-<h4>Wishlist</h4>
-<div class="list">
-  {{#if gifts}}
-    <p>Last updated: {{#if last_update}}{{last_update}}{{else}}N/A{{/if}}</p>
-    <ul>
-      {{#each gifts}}
-      <li>{{this.name}}</li>
-      {{/each}}
-  </ul>
-  {{else}}
-    Wishlist is empty.
-  {{/if}}
-</div>
 {{#if myAccount}}
-  <a href="wishlist/add">Add an item to your wishlist!</a>
+<p><a href="wishlist/add">Add an item to your wishlist!</a></p>
 {{/if}}
+{{#if results}}
+<div class="search_results">
+  <table>
+    <tr>
+      <td>Gift</td>
+      <td>Price</td>
+      <td>Tags</td>
+    </tr>
+    {{#each results}}
+    <tr>
+      <td>
+          {{#if this.name}}
+            {{#if this.url}}
+              <a href="{{this.url}}">{{this.name}}</a>
+            {{else}}{{this.name}}{{/if}}
+          {{else}}N/A{{/if}}
+      </td>
+      <td>{{#if this.price}}{{this.price}}{{else}}N/A{{/if}}</td>
+      <td>{{#if this.url}}{{this.url}}{{else}}N/A{{/if}}</td>
+    </tr>
+    {{/each}}
+  </table>
+</div>
+{{else}}
+<p>Wishlist is empty.</p>
+{{/if}}
+</div>
 </div>

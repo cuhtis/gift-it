@@ -3,6 +3,8 @@ $primary-colour: #FFFFFF;
 $secondary-colour: #E0E0E0;
 $error-colour: #990000;
 $background-colour: #003366;
+$bg-colour-light: rgba(255, 255, 255, 0.3);
+$bg-colour-dark: rgba(255, 255, 255, 0.2);
 $gradient-colour1: rgba(255, 255, 255, 0.3);
 $gradient-colour2: rgba(255, 255, 255, 0);
 
@@ -68,6 +70,33 @@ body {
 
 .error {
   color: $error-colour;
+}
+
+.search_results {
+  padding: 5px;
+  tr {
+    padding: 5px;
+    background-color: $bg-colour-light;
+    color: $secondary-colour;
+
+    td:first-child {
+      min-width: 100px;
+    }
+
+    td:nth-child(2) {
+      min-width: 80px;
+    }
+    
+    td:nth-child(3) {
+      min-width: 250px;
+    }
+  }
+
+  tr:first-child {
+    background-color: $bg-colour-dark;
+    color: $primary-colour;
+    font-weight: bold;
+  }
 }
 
 ul {
