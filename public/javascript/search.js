@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
   var byEventLink = document.getElementById('byEvent');
 
   var searchBy = searchByGift;
-  getSearchResults();
+  getSearchResults(null, true);
 
   byGiftLink.addEventListener('click', function() {
     searchBy = searchByGift;
@@ -15,6 +15,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     byTagLink.className = "";
     byUserLink.className = "";
     byEventLink.className = "";
+    getSearchResults(null, true);
   });
 
   byTagLink.addEventListener('click', function() {
@@ -23,6 +24,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     byGiftLink.className = "";
     byUserLink.className = "";
     byEventLink.className = "";
+    getSearchResults(null, true);
   });
 
   byUserLink.addEventListener('click', function() {
@@ -31,6 +33,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     byTagLink.className = "";
     byGiftLink.className = "";
     byEventLink.className = "";
+    getSearchResults(null, true);
   });
 
   byEventLink.addEventListener('click', function() {
@@ -39,14 +42,15 @@ document.addEventListener("DOMContentLoaded", function(event) {
     byTagLink.className = "";
     byUserLink.className = "";
     byGiftLink.className = "";
+    getSearchResults(null, true);
   });
   
   searchForm.addEventListener('submit', getSearchResults);
    
-  function getSearchResults (evt) {
+  function getSearchResults (evt, forceAll) {
     if (evt) evt.preventDefault();
     var searchQuery = document.getElementById('search_query');
-    searchBy.call(this, searchQuery.value);
+    searchBy.call(this, forceAll ? "" : searchQuery.value);
     return false;
   };
 

@@ -21,9 +21,9 @@ router.get('/', function(req, res, next) {
           else for (var i = gift.price; i > 0; i--) priceStr = priceStr + "$";
           return {
             id: gift._id,
-            name: gift.name,
+            name: capitalize(gift.name),
             price: priceStr,
-            tags: gift.tags.map(function (tag) { return tag.name; }).join(', ')
+            tags: gift.tags.map(function (tag) { return capitalize(tag.name); }).join(', ')
           };
         }) 
       });
@@ -44,7 +44,7 @@ router.get('/add', function(req, res, next) {
 
 router.post('/add', function(req, res, next) {
   var newGift = new Gift({
-    name: req.body.gift,
+    name: capitalize(req.body.gift),
     price: parseInt(req.body.price)
   });
   newGift.is_private = (req.body.privacy === "private");
@@ -52,7 +52,7 @@ router.post('/add', function(req, res, next) {
   req.body.tag.forEach(function(tag) {
     if (tag !== "") {
       tags.push({
-        name: tag,
+        name: capitalize(tag),
         is_private: false
       });
     }
@@ -75,12 +75,18 @@ router.get('/info', function(req, res, next) {
     Gift.findOne({ '_id': req.query.id }, function (err, gift) {
       // TODO: Catch err
       res.render('gift/gift_info', {
-        title: "Gift Information",
-        page_title: "Gift Information",
+        title: capitalize(gift.name),
+        page_title: capitalize(gift.name),
         gift: gift
       });
     });
   }
 });
+
+function capitalize (str) {
+  return str.toLowerCase().replace( /\b\w/g, function (m) {
+    return m.toUpperCase();
+  });
+}
 
 module.exports = router;

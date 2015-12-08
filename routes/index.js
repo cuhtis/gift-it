@@ -19,7 +19,6 @@ transporter.use('compile', hbs_mail({
 }));
 
 var User = mongoose.model('User');
-var List = mongoose.model('List');
 
 router.get('/', function(req, res, next) {
   res.render('index', {

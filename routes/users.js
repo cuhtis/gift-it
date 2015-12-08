@@ -19,11 +19,12 @@ router.get('/:username', function(req, res, next) {
     if (err) next();
     var isMine = req.user ? (req.params.username == req.user.username) : false;
     res.render('user/profile', {
-      title: isMine ? "My Account" : user.first_name + "'s Profile",
-      page_title: isMine ? "My Account" : user.first_name + "'s Profile",
+      title: isMine ? "My Account" : capitalize(user.first_name) + "'s Profile",
+      page_title: isMine ? "My Account" : capitalize(user.first_name) + "'s Profile",
       account: user,
       myAccount: isMine,
-      age: Math.floor(((new Date()) - (new Date(user.birthday)))/(1000 * 3600 * 24 * 365))
+      age: Math.floor(((new Date()) - (new Date(user.birthday)))/(1000 * 3600 * 24 * 365)),
+      isFriend: req.user ? (req.user.friends.indexOf(user._id) >= 0) : false
     });
   });
 });
@@ -35,8 +36,8 @@ router.get('/:username/wishlist', function(req, res, next) {
     }).populate('tags').exec(function (err, gifts) {
       console.log(gifts);
       res.render('user/wishlist', {
-        title: user.first_name + "'s Wishlist",
-        page_title: user.first_name + "'s Wishlist",
+        title: capitalize(user.first_name) + "'s Wishlist",
+        page_title: capitalize(user.first_name) + "'s Wishlist",
         account: user,
         myAccount: req.user ? (req.params.username == req.user.username) : false,
         gifts: gifts.map(function (gift) {
@@ -45,9 +46,9 @@ router.get('/:username/wishlist', function(req, res, next) {
           else for (var i = gift.price; i > 0; i--) priceStr = priceStr + "$";
           return {
             id: gift._id,
-            name: gift.name,
+            name: capitalize(gift.name),
             price: priceStr,
-            tags: gift.tags.map(function (tag) { return tag.name; }).join(', ')
+            tags: gift.tags.map(function (tag) { return capitalize(tag.name); }).join(', ')
           };
         })
       });
@@ -74,7 +75,7 @@ router.post('/:username/wishlist/add', function(req, res, next) {
   if (!req.user || req.user.username !== req.params.username) res.redirect('/user/' + req.params.username);
   else {
     var newGift = new Gift({
-      name: req.body.gift,
+      name: capitalize(req.body.gift),
       price: parseInt(req.body.price)
     });
     newGift.is_private = (req.body.privacy === "private");
@@ -82,7 +83,7 @@ router.post('/:username/wishlist/add', function(req, res, next) {
     req.body.tag.forEach(function(tag) {
       if (tag !== "") {
         tags.push({
-          name: tag,
+          name: capitalize(tag),
           is_private: false
         });
       }
@@ -99,5 +100,28 @@ router.post('/:username/wishlist/add', function(req, res, next) {
     });
   }
 });
+
+router.get('/:username/add_friend', function(req, res, next) {
+  if(!req.user) res.redirect('/login');
+  else if (req.user.username === req.params.username) res.redirect('/user/' + req.params.username);
+  else {
+    User.findOne({
+      'username': req.params.username
+    }, function(err, user) {
+      if (req.user.friends.indexOf(user._id) < 0) {
+        req.user.friends.push(user._id);
+        req.user.save(function() {
+          res.redirect('/user/' + req.params.username);
+        });
+      } else res.redirect('/user/' + req.params.username);
+    });
+  }
+});
+
+function capitalize (str) {
+  return str.toLowerCase().replace(/\b\w/g, function (m) {
+    return m.toUpperCase();
+  });
+}
 
 module.exports = router;

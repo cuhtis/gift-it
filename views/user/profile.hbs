@@ -1,5 +1,5 @@
 <div class="body">
-<h4>{{user.username}}</h4>
+<h4>{{account.username}}</h4>
 <table>
   <tr><td class="col1">Name</td><td>{{account.first_name}} {{account.last_name}}</td></tr>
   <tr><td class="col1">Email</td><td>{{account.email}}</td></tr>
@@ -13,5 +13,12 @@
 <p><a href="/change_password">Change password</a></p>
 {{else}}
 <p><a href="/user/{{account.username}}/wishlist">View {{account.first_name}}'s wishlist</a></p>
+{{#if user}}
+{{#if isFriend}}
+<p>You are friends with {{account.first_name}}!</p>
+{{else}}
+<p><a href="/user/{{account.username}}/add_friend">Add {{account.first_name}} as a Friend</a></p>
+{{/if}}
+{{/if}}
 {{/if}}
 </div>
