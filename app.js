@@ -39,9 +39,6 @@ app.use(sass({
   outputStyle: 'compressed'
 }));
 
-console.log(path.join(__dirname, 'sass'));
-console.log(path.join(__dirname, 'public/stylesheets'));
-
 app.use(express.static(path.join(__dirname, 'public')));
 
 var session = require('express-session');

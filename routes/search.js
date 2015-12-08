@@ -5,8 +5,10 @@ var mongoose = require('mongoose');
 var User = mongoose.model('User');
 var Gift = mongoose.model('Gift');
 var Tag = mongoose.model('Tag');
+var Event = mongoose.model('Event');
 
 router.get('/', function(req, res, next) {
+  // Render page
   res.render('search/gift', {
     title: 'Search Gifts',
     page_title: 'Search Gifts'
@@ -14,11 +16,14 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/gift_results', function(req, res, next) {
+  // Find gifts
   Gift.find({ '$and': [ 
     { 'name': { '$regex': req.query.search_query, '$options': 'i' } },
     { 'is_private': false }
   ]}).populate('tags').exec(function (err, gifts) {
-    // TODO: Error handling
+    if (err) { console.log(err); return res.send(500, 'Database error.'); }
+    
+    // Send AJAX response
     res.json(gifts.map(function(gift) {
       return {
         'id': gift._id,
@@ -31,19 +36,26 @@ router.get('/gift_results', function(req, res, next) {
 });
 
 router.get('/tag_results', function(req, res, next) {
+  // Find tags
   Tag.find({ '$and': [
     { 'name': { '$regex': req.query.search_query, '$options': 'i' } },
     { 'is_private': false }
   ]}, function (err, tags) {
-    // TODO: Error handling
+    if (err) { console.log(err); return res.send(500, 'Database error.'); }
+    
+    // Get tag ids
     tagIds = tags.map(function(tag) {
       return tag._id;
     });
+    
+    // Find gifts
     Gift.find({ '$and': [
       { 'tags': { '$in': tagIds } },
       { 'is_private': false }
     ]}).populate('tags').exec(function(err, gifts) {
-      // TODO: Error handling
+      if (err) { console.log(err); return res.send(500, 'Database error.'); }
+
+      // Send AJAX response
       res.json(gifts.map(function(gift) {
         return {
           'id': gift._id,
@@ -57,10 +69,13 @@ router.get('/tag_results', function(req, res, next) {
 });
 
 router.get('/user_results', function(req, res, next) {
+  // Find users
   User.find({ 
     'username': { '$regex': req.query.search_query, '$options': 'i' }
   }, function (err, users) {
-    // TODO: Error handling
+    if (err) { console.log(err); return res.send(500, 'Database error.'); }
+
+    // Send AJAX response
     res.json(users.map(function(user) {
       return {
         'username': user.username,
@@ -72,20 +87,28 @@ router.get('/user_results', function(req, res, next) {
 });
 
 router.get('/event_results', function(req, res, next) {
-  Gift.find({ 
-    'name': { '$regex': req.query.search_query, '$options': 'i' }
-  }, function (err, gifts) {
-    // TODO: Error handling
-    console.log(gifts);
-    res.json(gifts.map(function(gift) {
+  // Find events
+  Event.find({ '$and': [
+    { 'name': { '$regex': req.query.search_query, '$options': 'i' } },
+    { 'is_private': false }
+  ]}).populate('tags').exec(function (err, events) {
+    if (err) { console.log(err); return res.send(500, 'Database error.'); }
+   
+    // Send AJAX response 
+    res.json(events.map(function(evt) {
       return {
-        'name': capitalize(gift.name)
+        'name': capitalize(evt.name),
+        'date': evt.date,
+        'tags': evt.tags.map(function(tag) { return capitalize(tag.name); })
       };
     }));
   });
 });
 
+/** Helper Functions **/
+
 function capitalize (str) {
+  // Capitalize first letter, lowercase other letters
   return str.toLowerCase().replace( /\b\w/g, function (m) {
     return m.toUpperCase();
   });
