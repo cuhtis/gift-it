@@ -33,12 +33,14 @@ app.use(cookieParser());
 
 app.use(sass({
   src: path.join(__dirname, 'sass'),
-  dst: path.join(__dirname, 'public/stylesheets'),
-  prefix: '/stylesheets/',
+  dest: path.join(__dirname, 'public/stylesheets'),
   debug: true,
-  force: true,
+  prefix: '/stylesheets/',
   outputStyle: 'compressed'
 }));
+
+console.log(path.join(__dirname, 'sass'));
+console.log(path.join(__dirname, 'public/stylesheets'));
 
 app.use(express.static(path.join(__dirname, 'public')));
 
