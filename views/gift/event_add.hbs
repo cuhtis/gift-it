@@ -1,0 +1,33 @@
+<script src="/javascript/tags.js"></script>
+<div class="body">
+<form method="POST">
+  <div class="box">
+    <p>
+      <label for="event">Event:</label>
+      <input name="event" type="text">
+    </p>
+    <p>
+      <label for="date">Date:</label>
+      <input name="date" type="date">
+    </p>
+    <p>
+      <label for="privacy">Privacy:</label>
+      <select name="privacy">
+        <option value="public">Public</option>
+        <option value="private">Private</option>
+      </select>
+    </p>
+  </div>
+  <br>
+  <div class="box" id="tags">
+    Tags
+    <p>
+      <input name="tag" type="text">
+      <button class="btn" id="add_tag">+</button>
+      <button class="btn" id="rem_tag">-</button>
+    </p>
+  </div>
+  <br>
+  <input class="btn" type="submit" value="Add Event">
+</form>
+</div>

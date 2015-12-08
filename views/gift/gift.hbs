@@ -1,24 +1,33 @@
+<script src="/javascript/list.js"></script>
 <div class="body">
+
+<h4>Gifts</h4>
 <p><a href="/gift/add">Add a Gift</a></p>
 
+<div class="search_results" id="gift_list">
 {{#if gifts}}
-<div class="search_results">
   <table>
     <tr>
       <td>Gift</td>
       <td>Price</td>
       <td>Tags</td>
+      <td>Options</td>
     </tr>
     {{#each gifts}}
     <tr>
       <td><a href="/gift/info?id={{this.id}}">{{this.name}}</a></td>
       <td>{{#if this.price}}{{this.price}}{{else}}N/A{{/if}}</td>
       <td>{{#if this.tags}}{{this.tags}}{{else}}N/A{{/if}}</td>
+      <td><a class="rem_link" id="{{this.id}}">Remove</a></td>
     </tr>
     {{/each}}
   </table>
-</div>
 {{else}}
-<p>No gifts in your list.</p>
+  <p>No gifts in your list.</p>
 {{/if}}
+</div>
+
+<h4>Events</h4>
+<p><a href="/gift/add">Add an Event</a></p>
+
 </div>

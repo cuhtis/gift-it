@@ -69,6 +69,21 @@ router.post('/add', function(req, res, next) {
   });
 });
 
+router.post('/remove', function(req, res, next) {
+  if (!req.user) res.send(500, 'Error occurred: database error.');
+  else {
+    var i = req.user.giftlist.indexOf(req.body.id);
+    if (i < 0) res.send(500, 'Error occurred: database error.');
+    else {
+      req.user.giftlist.splice(i, 1);
+      req.user.save(function(err) {
+        if (err) return res.send(500, 'Error occurred: database error.');
+        res.json({ success: true });
+      });
+    }
+  }
+});
+
 router.get('/info', function(req, res, next) {
   if (!req.query.id) res.redirect('/');
   else {
