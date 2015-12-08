@@ -5,6 +5,7 @@ var mongoose = require('mongoose');
 var User = mongoose.model('User');
 var List = mongoose.model('List');
 var Gift = mongoose.model('Gift');
+var Tag = mongoose.model('Tag');
 
 router.get('/', function(req, res, next) {
   if (!req.user) res.redirect('/login');
@@ -49,6 +50,27 @@ router.get('/add', function(req, res, next) {
       page_title: "Add Gift"
     });
   }
+});
+
+router.post('/add', function(req, res, next) {
+  var newGift = new Gift({
+    name: req.body.gift,
+    price: parseInt(req.body.price)
+  });
+  newGift.is_private = (req.body.privacy === "private");
+  var tags = [];
+  req.body.tag.forEach(function(tag) {
+    tags.push({
+      name: tag,
+      is_private: false
+    });
+  });
+  Tag.collection.insert(tags, function(err, t) {
+    newGift.tags = t.ops.map(function(ele) { return ele._id });
+    newGift.save(function() {
+      res.redirect('/gift');
+    });
+  });
 });
 
 router.get('/info', function(req, res, next) {

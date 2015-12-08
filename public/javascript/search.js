@@ -6,6 +6,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
   var byUserLink = document.getElementById('byUser');
   var byEventLink = document.getElementById('byEvent');
 
+  var searchBy = searchByGift;
+  getSearchResults();
+
   byGiftLink.addEventListener('click', function() {
     searchBy = searchByGift;
     byGiftLink.className = "bold";
@@ -38,14 +41,16 @@ document.addEventListener("DOMContentLoaded", function(event) {
     byGiftLink.className = "";
   });
   
-  searchForm.addEventListener('submit', function(evt) {
-    evt.preventDefault();
+  searchForm.addEventListener('submit', getSearchResults);
+   
+  function getSearchResults (evt) {
+    if (evt) evt.preventDefault();
     var searchQuery = document.getElementById('search_query');
     searchBy.call(this, searchQuery.value);
     return false;
-  });
+  };
 
-  var searchByGift = function (search_query) {
+  function searchByGift (search_query) {
     var req = new XMLHttpRequest();
     var url = '/search/gift_results?search_query=' + search_query || "";
     req.open('GET', url, true);
@@ -92,20 +97,30 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
   function listResults (resultList) {
     var results = document.getElementById('results');
+    console.log("resultList:", resultList);
     if (resultList.length == 0) results.innerHTML = "<p>No results found.</p>";
     else {
       var html = [];
-      html.push('<table><tr><td>Item</td><td>Price</td><td>Link</td></tr>');
+      html.push('<table><tr><td>Item</td><td>Price</td><td>Tags</td></tr>');
       resultList.forEach(function (result) {
         html.push('<tr>' + 
-            '<td>' + result.name + '</td>' +
-            '<td>' + result.name + '</td>' +
-            '<td>' + result.name + '</td>' +
+            '<td><a href="/gift/info?id=' + result.id + '">' + result.name + '</a></td>' +
+            '<td>' + toDollars(result.price) + '</td>' +
+            '<td>' + result.tags.join(', ') + '</td>' +
             '</tr>');
       });
+      html.push('<p>Click on a gift name to learn more</p>');
       results.innerHTML = html.join("");
     }
   }
 
-  var searchBy = searchByGift;
+  function toDollars (price) {
+    if (!price) return "N/A";
+    var str = "";
+    for (var i = price; i > 0; i--) {
+      str = str + "$";
+    }
+    return str;
+  }
+
 });

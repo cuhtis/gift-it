@@ -1,5 +1,5 @@
 <div class="body">
-<a href="/gift/add">Add a Gift</a>
+<p><a href="/gift/add">Add a Gift</a></p>
 
 {{#if results}}
 <div class="search_results">
@@ -24,5 +24,7 @@
     {{/each}}
   </table>
 </div>
+{{else}}
+<p>No gifts in your list.</p>
 {{/if}}
 </div>
