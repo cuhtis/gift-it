@@ -60,12 +60,12 @@ var List = new mongoose.Schema({
 
 ## Topics
 
-* Authentication (3 pts)
-* Pre-built Express templates (1 pts)
-* CSS Preprocessor - SASS (1 pts)
-* Concatenation and minification of CSS and JavaScript files (1 pts)
-* Server-side JS Module - NodeMailer (1 pts)
-* Ebay API (2 pts)
+* Authentication (3 pts) ✓
+* Pre-built Express templates (1 pts) ✓
+* CSS Preprocessor - SASS (1 pts) ✓
+* Concatenation and minification of CSS and JavaScript files (1 pts) ✓
+* Server-side JS Module - NodeMailer (1 pts) ✓
+* Ebay API (2 pts) ✓
 
 ## Modules
 

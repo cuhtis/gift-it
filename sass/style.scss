@@ -164,10 +164,16 @@ table {
 a {
   text-decoration: none;
   color: $secondary-colour;
+  cursor: pointer hand;
 }
 
 a:hover {
   text-decoration: none;
+  color: $primary-colour;
+  cursor: pointer hand;
+}
+
+a.bold {
   color: $primary-colour;
 }
 

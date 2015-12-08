@@ -7,34 +7,24 @@ var List = mongoose.model('List');
 var Gift = mongoose.model('Gift');
 
 router.get('/', function(req, res, next) {
-  if (req.user) {
-    res.redirect('/search/gift');
-  } else {
-    res.redirect('/login');
-  }
+  res.render('search/gift', {
+    title: 'Search Gifts',
+    page_title: 'Search Gifts'
+  });
 });
 
-router.get('/gift', function(req, res, next) {
-  if (req.query.item) {
-    Gift.find({ 'name': { '$regex': req.query.item, '$options': 'i' } }, function (err, gifts) {
-      console.log(gifts);
-      res.render('search/gift', {
-        title: 'Search by Gift',
-        page_title: 'Search by Gift',
-        account: req.user,
-        results: gifts
-      });
-    });
-  } else {
-    Gift.find({}, function(err, gifts) {
-      res.render('search/gift', {
-        title: 'Search by Gift',
-        page_title: 'Search by Gift',
-        account: req.user,
-        results: gifts
-      });
-    });
-  }
+router.get('/gift_results', function(req, res, next) {
+  Gift.find({ 
+    'name': { '$regex': req.query.search_query, '$options': 'i' }
+  }, function (err, gifts) {
+    // TODO: Error handling
+    console.log(gifts);
+    res.json(gifts.map(function(gift) {
+      return {
+        'name': gift.name
+      };
+    }));
+  });
 });
 
 router.get('/tag', function(req, res, next) {

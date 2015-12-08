@@ -1,35 +1,17 @@
+<script src="/javascript/search.js"></script>
 <div class="body">
 <p><strong>
-  Search by:&emsp;<a href="/search/gift">Gift</a>&emsp;<a href="/search/tag">Tag</a>&emsp;<a href="/search/user">User</a>
+  Search by:&emsp;<a id="byGift" class="bold">Gift</a>&emsp;<a id="byTag">Tag</a>&emsp;<a id="byUser">User</a>&emsp;<a id="byEvent">Event</a>
 </strong></p>
-<form method="GET">
+<form>
   <div class="box">
     <p>
-      <input name="item" type="search">
+      <input type="search" id="search_query">
+      <input type="hidden" id="search_by" value="gift">
       <input class="btn" type="submit" value="Search">
     </p>
   </div>
 </form> 
-{{#if results}}
-<div class="search_results">
-  <table>
-    <tr>
-      <td>Gift</td>
-      <td>Price</td>
-      <td>Tags</td>
-    </tr>
-    {{#each results}}
-    <tr>
-      <td>
-          {{#if this.name}}
-            <a href="/gift/info?id={{this._id}}">{{this.name}}</a>
-          {{else}}N/A{{/if}}
-      </td>
-      <td>{{#if this.price}}{{this.price}}{{else}}N/A{{/if}}</td>
-      <td>{{#if this.url}}{{this.url}}{{else}}N/A{{/if}}</td>
-    </tr>
-    {{/each}}
-  </table>
-</div>
-{{/if}}
+
+<div class="search_results" id="results"></div>
 </div>
