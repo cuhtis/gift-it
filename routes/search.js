@@ -45,7 +45,6 @@ router.get('/tag_results', function(req, res, next) {
       { 'is_private': false }
     ]}).populate('tags').exec(function(err, gifts) {
       // TODO: Error handling
-      console.log(gifts);
       res.json(gifts.map(function(gift) {
         return {
           'id': gift._id,
@@ -59,14 +58,15 @@ router.get('/tag_results', function(req, res, next) {
 });
 
 router.get('/user_results', function(req, res, next) {
-  Gift.find({ 
-    'name': { '$regex': req.query.search_query, '$options': 'i' }
-  }, function (err, gifts) {
+  User.find({ 
+    'username': { '$regex': req.query.search_query, '$options': 'i' }
+  }, function (err, users) {
     // TODO: Error handling
-    console.log(gifts);
-    res.json(gifts.map(function(gift) {
+    res.json(users.map(function(user) {
       return {
-        'name': gift.name
+        'username': user.username,
+        'name': user.first_name + ' ' + user.last_name,
+        'email': user.email
       };
     }));
   });

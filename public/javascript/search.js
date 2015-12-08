@@ -88,7 +88,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     req.addEventListener('load', function() {
       if (req.status >= 200 && req.status < 400) {
         var data = JSON.parse(req.responseText);
-        listResults(data);
+        listUsers(data);
       }
     });
 
@@ -97,24 +97,48 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
   function listResults (resultList) {
     var results = document.getElementById('results');
-    console.log("resultList:", resultList);
     if (resultList.length == 0) results.innerHTML = "<p>No results found.</p>";
     else {
       var html = [];
+      html.push('<p>Click on a gift name to learn more!</p>');
       html.push('<table><tr><td>Item</td><td>Price</td><td>Tags</td></tr>');
       resultList.forEach(function (result) {
         html.push('<tr>' + 
             '<td><a href="/gift/info?id=' + result.id + '">' + result.name + '</a></td>' +
-            '<td>' + toDollars(result.price) + '</td>' +
-            '<td>' + result.tags.join(', ') + '</td>' +
+            '<td>' + parsePrice(result.price) + '</td>' +
+            '<td>' + parseTags(result.tags) + '</td>' +
             '</tr>');
       });
-      html.push('<p>Click on a gift name to learn more</p>');
+      html.push('</table>');
       results.innerHTML = html.join("");
     }
   }
 
-  function toDollars (price) {
+  function listUsers (resultList) {
+    var results = document.getElementById('results');
+    if (resultList.length == 0) results.innerHTML = "<p>No results found.</p>";
+    else {
+      var html = [];
+      html.push('<p>Click on a username to see their profile!</p>');
+      html.push('<table><tr><td>Username</td><td>Name</td><td>Email</td></tr>');
+      resultList.forEach(function (result) {
+        html.push('<tr>' + 
+            '<td><a href="/user/' + result.username + '">' + result.username + '</a></td>' +
+            '<td>' + result.name + '</td>' +
+            '<td>' + result.email + '</td>' +
+            '</tr>');
+      });
+      html.push('</table>');
+      results.innerHTML = html.join("");
+    }
+  }
+
+  function parseTags (tags) {
+    if (!tags || tags.length == 0) return "N/A";
+    return tags.join(', ');
+  }
+
+  function parsePrice (price) {
     if (!price) return "N/A";
     var str = "";
     for (var i = price; i > 0; i--) {

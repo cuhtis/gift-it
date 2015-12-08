@@ -2,7 +2,8 @@
 {{#if myAccount}}
 <p><a href="wishlist/add">Add an item to your wishlist!</a></p>
 {{/if}}
-{{#if results}}
+
+{{#if gifts}}
 <div class="search_results">
   <table>
     <tr>
@@ -10,17 +11,11 @@
       <td>Price</td>
       <td>Tags</td>
     </tr>
-    {{#each results}}
+    {{#each gifts}}
     <tr>
-      <td>
-          {{#if this.name}}
-            {{#if this.url}}
-              <a href="{{this.url}}">{{this.name}}</a>
-            {{else}}{{this.name}}{{/if}}
-          {{else}}N/A{{/if}}
-      </td>
+      <td><a href="/gift/info?id={{this.id}}">{{this.name}}</a></td>
       <td>{{#if this.price}}{{this.price}}{{else}}N/A{{/if}}</td>
-      <td>{{#if this.url}}{{this.url}}{{else}}N/A{{/if}}</td>
+      <td>{{#if this.tags}}{{this.tags}}{{else}}N/A{{/if}}</td>
     </tr>
     {{/each}}
   </table>
@@ -29,4 +24,5 @@
 <p>Wishlist is empty.</p>
 {{/if}}
 </div>
+<p><a href="/user/{{account.username}}">Back to Account</a></p>
 </div>

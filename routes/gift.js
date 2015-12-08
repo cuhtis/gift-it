@@ -3,41 +3,30 @@ var router = express.Router();
 var mongoose = require('mongoose');
 
 var User = mongoose.model('User');
-var List = mongoose.model('List');
 var Gift = mongoose.model('Gift');
 var Tag = mongoose.model('Tag');
 
 router.get('/', function(req, res, next) {
   if (!req.user) res.redirect('/login');
   else {
-    User.findOne({ 'username': req.user.username }, function (err, user) {
-      if (user.giftList) {
-        List.findOne({ '_id': user.giftlist }, function (err, giftList) {
-          var idList = giftList.gifts.map(function (ele) {
-            return ele.gift;
-          });
-          Gift.find({ '_id': { $in: idlist } }, function (err, gifts) {
-            res.render('gift/gift', {
-              title: "My Gifts",
-              page_title: "My Gifts",
-              gifts: gifts
-            });
-          });
-        });
-      } else {
-        var list = new List({
-          list_name: "Public List",
-          list_owner: user._id,
-          gifts: []
-        });
-        list.save(function() {
-          res.render('gift/gift', {
-            title: "My Gifts",
-            page_title: "My Gifts",
-            gifts: []
-          });
-        });
-      }
+    Gift.find({
+      '_id': { $in: req.user.giftlist } 
+    }).populate('tags').exec(function (err, gifts) {
+      res.render('gift/gift', {
+        title: "My Gifts",
+        page_title: "My Gifts",
+        gifts: gifts.map(function (gift) {
+          var priceStr = "";
+          if (!gift.price) priceStr = "N/A";
+          else for (var i = gift.price; i > 0; i--) priceStr = priceStr + "$";
+          return {
+            id: gift._id,
+            name: gift.name,
+            price: priceStr,
+            tags: gift.tags.map(function (tag) { return tag.name; }).join(', ')
+          };
+        }) 
+      });
     });
   }
 });
@@ -47,7 +36,8 @@ router.get('/add', function(req, res, next) {
   else {
     res.render('gift/gift_add', {
       title: "Add Gift",
-      page_title: "Add Gift"
+      page_title: "Add Gift",
+      show_nav: false
     });
   }
 });
@@ -60,15 +50,21 @@ router.post('/add', function(req, res, next) {
   newGift.is_private = (req.body.privacy === "private");
   var tags = [];
   req.body.tag.forEach(function(tag) {
-    tags.push({
-      name: tag,
-      is_private: false
-    });
+    if (tag !== "") {
+      tags.push({
+        name: tag,
+        is_private: false
+      });
+    }
   });
   Tag.collection.insert(tags, function(err, t) {
     newGift.tags = t.ops.map(function(ele) { return ele._id });
     newGift.save(function() {
-      res.redirect('/gift');
+      if (!req.user.giftlist) req.user.giftlist = [];
+      req.user.giftlist.push(newGift._id);
+      req.user.save(function() {
+        res.redirect('/gift');
+      });
     });
   });
 });

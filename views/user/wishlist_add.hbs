@@ -1,3 +1,4 @@
+<script src="/javascript/tags.js"></script>
 <div class="body">
 <form method="POST">
   <div class="box">
@@ -6,12 +7,14 @@
       <input name="gift" type="text">
     </p>
     <p>
-      <label for="link">Price:</label>
-      <input name="price" type="text">
-    </p>
-    <p>
-      <label for="link">Link:</label>
-      <input name="link" type="text">
+      <label for="price">Price:</label>
+      <select name="price">
+        <option value=1>$</option>
+        <option value=2>$$</option>
+        <option value=3>$$$</option>
+        <option value=4>$$$$</option>
+        <option value=5>$$$$$</option>
+      </select>
     </p>
     <p>
       <label for="privacy">Privacy:</label>
@@ -19,6 +22,15 @@
         <option value="public">Public</option>
         <option value="private">Private</option>
       </select>
+    </p>
+  </div>
+  <br>
+  <div class="box" id="tags">
+    Tags
+    <p>
+      <input name="tag" type="text">
+      <button class="btn" id="add_tag">+</button>
+      <button class="btn" id="rem_tag">-</button>
     </p>
   </div>
   <br>
