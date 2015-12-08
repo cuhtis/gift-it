@@ -28,6 +28,29 @@
 </div>
 
 <h4>Events</h4>
-<p><a href="/gift/add">Add an Event</a></p>
+<p><a href="/gift/add_event">Add an Event</a></p>
+
+<div class="search_results" id="event_list">
+{{#if events}}
+  <table>
+    <tr>
+      <td>Event</td>
+      <td>Date</td>
+      <td>Tags</td>
+      <td>Options</td>
+    </tr>
+    {{#each events}}
+    <tr>
+      <td><a href="">{{this.name}}</a></td>
+      <td>{{#if this.date}}{{this.datee}}{{else}}N/A{{/if}}</td>
+      <td>{{#if this.tags}}{{this.tags}}{{else}}N/A{{/if}}</td>
+      <td><a class="rem_link" id="{{this.id}}">Remove</a></td>
+    </tr>
+    {{/each}}
+  </table>
+{{else}}
+  <p>No events in your list.</p>
+{{/if}}
+</div>
 
 </div>

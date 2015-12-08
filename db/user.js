@@ -10,6 +10,7 @@ var UserSchema = new mongoose.Schema({
   friends: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
   giftlist: [{type: mongoose.Schema.Types.ObjectId, ref: 'Gift'}],
   wishlist: [{type: mongoose.Schema.Types.ObjectId, ref: 'Gift'}],
+  eventlist: [{type: mongoose.Schema.Types.ObjectId, ref: 'Event'}],
   options: {
     notify_me: {type: Boolean, default: true},
     notify_time: {type: Number, default: 3}

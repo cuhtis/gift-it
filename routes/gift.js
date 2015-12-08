@@ -5,6 +5,7 @@ var mongoose = require('mongoose');
 var User = mongoose.model('User');
 var Gift = mongoose.model('Gift');
 var Tag = mongoose.model('Tag');
+var Event = mongoose.model('Event');
 
 router.get('/', function(req, res, next) {
   if (!req.user) res.redirect('/login');
@@ -12,20 +13,33 @@ router.get('/', function(req, res, next) {
     Gift.find({
       '_id': { $in: req.user.giftlist } 
     }).populate('tags').exec(function (err, gifts) {
-      res.render('gift/gift', {
-        title: "My Gifts",
-        page_title: "My Gifts",
-        gifts: gifts.map(function (gift) {
-          var priceStr = "";
-          if (!gift.price) priceStr = "N/A";
-          else for (var i = gift.price; i > 0; i--) priceStr = priceStr + "$";
-          return {
-            id: gift._id,
-            name: capitalize(gift.name),
-            price: priceStr,
-            tags: gift.tags.map(function (tag) { return capitalize(tag.name); }).join(', ')
-          };
-        }) 
+
+      Event.find({
+        '_id': { $in: req.user.eventlist }
+      }).populate('tags').exec(function (err, events) {
+
+        res.render('gift/gift', {
+          title: "My Gifts",
+          page_title: "My Gifts",
+          gifts: gifts.map(function (gift) {
+            var priceStr = "";
+            if (!gift.price) priceStr = "N/A";
+            else for (var i = gift.price; i > 0; i--) priceStr = priceStr + "$";
+            return {
+              id: gift._id,
+              name: capitalize(gift.name),
+              price: priceStr,
+              tags: gift.tags.map(function (tag) { return capitalize(tag.name); }).join(', ')
+            };
+          }),
+          events: events.map(function (evt) {
+            return {
+              id: evt._id,
+              name: capitalize(evt.name),
+              tags: evt.tags.map(function (tag) { return capitalize(tag.name); }).join(', ')
+            };
+          })
+        });
       });
     });
   }
@@ -76,6 +90,60 @@ router.post('/remove', function(req, res, next) {
     if (i < 0) res.send(500, 'Error occurred: database error.');
     else {
       req.user.giftlist.splice(i, 1);
+      req.user.save(function(err) {
+        if (err) return res.send(500, 'Error occurred: database error.');
+        res.json({ success: true });
+      });
+    }
+  }
+});
+
+router.get('/add_event', function(req, res, next) {
+  if (!req.user) res.redirect('/login');
+  else {
+    res.render('gift/event_add', {
+      title: "Add Event",
+      page_title: "Add Event",
+      show_nav: false
+    });
+  }
+});
+
+router.post('/add_event', function(req, res, next) {
+  var newEvent = new Event({
+    name: capitalize(req.body.name),
+    date: req.body.date
+  });
+  newEvent.is_private = (req.body.privacy === "private");
+  var tags = [];
+  req.body.tag.forEach(function(tag) {
+    if (tag !== "") {
+      tags.push({
+        name: capitalize(tag),
+        is_private: false
+      });
+    }
+  });
+  Tag.collection.insert(tags, function(err, t) {
+    newEvent.tags = t.ops.map(function(ele) { return ele._id });
+    newEvent.save(function(err) {
+      if (err) console.log(newEvent);
+      if (!req.user.eventlist) req.user.eventlist = [];
+      req.user.eventlist.push(newEvent._id);
+      req.user.save(function() {
+        res.redirect('/gift');
+      });
+    });
+  });
+});
+
+router.post('/remove_event', function(req, res, next) {
+  if (!req.user) res.send(500, 'Error occurred: database error.');
+  else {
+    var i = req.user.eventlist.indexOf(req.body.id);
+    if (i < 0) res.send(500, 'Error occurred: database error.');
+    else {
+      req.user.eventlist.splice(i, 1);
       req.user.save(function(err) {
         if (err) return res.send(500, 'Error occurred: database error.');
         res.json({ success: true });
