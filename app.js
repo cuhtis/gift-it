@@ -6,11 +6,15 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var passport = require('passport');
 var sass = require('node-sass-middleware');
+
 // Database
 require('./db/db');
 
 // Authentication
-require('./auth.js');
+require('./auth');
+
+// Schedule
+requier('./schedule');
 
 // Routes
 var routes = require('./routes/index');
