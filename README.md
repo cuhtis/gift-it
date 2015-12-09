@@ -8,9 +8,9 @@ Gift It is a web application where users can store gift ideas under certain cate
 
 Gift It will use MongoDB (NoSQL, document-store) as its database.
 
-Gift It will need to store Users, Friends, Gifts, as well as category headers of gifts: Type, Occasion and Reason.
+Gift It will need to store Users, Gifts, Events and Tags (descriptives for gifts/events).
 
-* Users will store Gifts and Friends. 
+* Users will store Gifts and Events. 
 
 First draft schema:
 
@@ -19,30 +19,42 @@ First draft schema:
 // * our site requires authentication so users have a username and password
 var User = new mongoose.Schema({
 	// username, password provided by plugin
-	display_name: String,
+  first_name: String,
+	last_name: String,
 	email: String,
-	friends: [{
-    name: String,
-    birthday: Date,
-    account: User,
-    gifts: List
-  }],
-	wishlist: List
+  birthday: Date,
+	friends: [User],
+	wishlist: [Gift],
+  giftlist: [Gift],
+  eventlist: [Event]
 });
 
 // Gift
 var Gift = new mongoose.Schema({
 	gift_name: String,
+  owner: User,
   price: Number,
-	url: String,
+  tags: [Tag],
+  is_private: Boolean
 });
 
-// List
-var List = new mongoose.Schema({
-  list_owner: User,
-  list_for: User,
-  gifts: [Gift]
+// Event
+var Event = new mongoose.Schema({
+  name: String,
+  owner: User,
+  date: Date,
+  tags: [Tag],
+  is_private: Boolean,
+  giftlist: [Gift]
 });
+
+// Tag
+var Tag = new mongoose.Schema({
+  name: String,
+  is_private: Boolean,
+  type: String
+});
+
 ```
 
 ## Wireframes
@@ -63,8 +75,8 @@ var List = new mongoose.Schema({
 * Authentication (3 pts) ✓
 * Pre-built Express templates (1 pts) ✓
 * CSS Preprocessor - SASS (1 pts) ✓
-* Concatenation and minification of CSS and JavaScript files (1 pts) ✓
 * Server-side JS Module - NodeMailer (1 pts) ✓
+* Server-side JS Module - Node-Schedule (1 pts) ✓
 * Ebay API (2 pts) ✓
 
 ## Modules
