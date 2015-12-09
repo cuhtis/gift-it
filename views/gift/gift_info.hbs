@@ -32,8 +32,24 @@
   }
 </script>
 
+<div class="body">
 <h4>{{gift.name}}</h4>
 
-<div class="search_results" id="results">
+<div class="search_results">
+<table>
+  <tr>
+    <td>Gift</td>
+    <td>Price</td>
+    <td>Tags</td>
+  </tr>
+  <tr>
+    <td>{{gift.name}}</td>
+    <td>{{gift.price}}</td>
+    <td>{{gift.tags}}</td>
+  </tr>
+</table>
+</div>
 
+<div class="search_results" id="results">
+</div>
 </div>

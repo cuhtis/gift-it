@@ -68,19 +68,34 @@ router.post('/add', function(req, res, next) {
       
       // Add tags to gift
       newGift.tags = tags.ops.map(function(t) { return t._id });
-      
-      // Save gift
-      newGift.save(function(err) {
-        if (err) { console.log(err); return res.send(500, 'Database error.'); }
+     
+      // Generate Event Ids array
+      var event_ids = [];
+      if (Array.isArray(req.body.evt)) {
+        req.body.evt.forEach(function(evt) {
+          if (evt !== "") event_ids.push(evt);
+        });
+      } else if (req.body.evt !== "") event_ids.push(req.body.evt);
 
-        // Add gift to user's giftlist
-        if (!req.user.giftlist) req.user.giftlist = [];
-        req.user.giftlist.push(newGift._id);
-        
-        // Save user
-        req.user.save(function(err) {
+      // Find and update events
+      Event.update({
+        '_id': { '$in' : event_ids }
+      }, {
+        '$push': { 'giftlist' : newGift._id }
+      }, { 'multi': true }, function (err) {
+        // Save gift
+        newGift.save(function(err) {
           if (err) { console.log(err); return res.send(500, 'Database error.'); }
-          res.redirect('/gift');
+  
+          // Add gift to user's giftlist
+          if (!req.user.giftlist) req.user.giftlist = [];
+          req.user.giftlist.push(newGift._id);
+        
+          // Save user
+          req.user.save(function(err) {
+            if (err) { console.log(err); return res.send(500, 'Database error.'); }
+            res.redirect('/gift');
+          });
         });
       });
     });
@@ -112,11 +127,16 @@ router.get('/add_event', function(req, res, next) {
   // Must be logged in
   if (!req.user) res.redirect('/login');
   else {
-    // Render page
-    res.render('gift/event_add', {
-      title: "Add Event",
-      page_title: "Add Event",
-      show_nav: false
+    getGiftList(req.user.giftlist, false, function (err, gifts) {
+      if (err) { console.log(err); return res.send(500, 'Database error.'); }
+
+      // Render page
+      res.render('gift/event_add', {
+        title: "Add Event",
+        page_title: "Add Event",
+        show_nav: false,
+        gifts: parseGifts(gifts, true)
+      });
     });
   }
 });
@@ -139,6 +159,14 @@ router.post('/add_event', function(req, res, next) {
 
       // Add tags to event
       newEvent.tags = tags.ops.map(function(t) { return t._id });
+
+      // Add gifts to event
+      newEvent.giftlist = [];
+      if (Array.isArray(req.body.gift)) {
+        req.body.gift.forEach(function(g) {
+          if (g !== "") newEvent.giftlist.push(g);
+        });
+      } else if (req.body.gift !== "") newEvent.giftlist.push(req.body.gift);
 
       // Save event
       newEvent.save(function(err) {
@@ -183,14 +211,50 @@ router.get('/info', function(req, res, next) {
   if (!req.query.id) res.redirect('/');
   else {
     // Find gift
-    Gift.findOne({ '_id': req.query.id }, function (err, gift) {
+    Gift.findOne({
+      '_id': req.query.id 
+    }).populate('tags').exec(function (err, gift) {
       if (err) { console.log(err); return res.send(500, 'Database error.'); }
       
       // Render page
       res.render('gift/gift_info', {
         title: capitalize(gift.name),
         page_title: capitalize(gift.name),
-        gift: gift
+        gift: {
+          'id': gift._id,
+          'name': capitalize(gift.name),
+          'price': toDollars(gift.price),
+          'tags': gift.tags.map(function (tag) { return tag.name; }).join(', ')
+        }
+      });
+    });
+  }
+});
+
+router.get('/event_info', function(req, res, next) {
+  // Check that a query id was passed in
+  if (!req.query.id) res.redirect('/');
+  else {
+    // Find event
+    Event.findOne({ 
+      '_id': req.query.id 
+    }).populate('tags').populate('giftlist').exec(function (err, evt) {
+      if (err) { console.log(err); return res.send(500, 'Database error.'); }
+     
+      Tag.populate(evt.giftlist, { 'path': 'tags' }, function (err) {
+        if (err) { console.log(err); return res.send(500, 'Database error.'); }
+
+        // Render page
+        res.render('gift/event_info', {
+          title: capitalize(evt.name),
+          page_title: capitalize(evt.name),
+          evt: {
+            'name': capitalize(evt.name),
+            'date': evt.date,
+            'tags': evt.tags.map(function (tag) { return tag.name; }).join(', '),
+          },
+          gift: parseGifts(evt.giftlist)
+        });
       });
     });
   }
@@ -236,16 +300,11 @@ function getEventList (list, tags, callback) {
 
 function parseGifts (gifts, id) {
   return gifts.map(function (gift) {
-    // Create price string
-    var priceStr = "";
-    if (!gift.price) priceStr = "N/A";
-    else for (var i = gift.price; i > 0; i--) priceStr = priceStr + "$";
-
     // Return parsed gift object
     return {
       id: gift._id,
       name: capitalize(gift.name),
-      price: priceStr,
+      price: toDollars(gift.price),
       tags: gift.tags.map(function (tag) { 
         return id ? tag : capitalize(tag.name); 
       }).join(', ')
@@ -259,6 +318,7 @@ function parseEvents (events, id) {
     return {
       id: evt._id,
       name: capitalize(evt.name),
+      date: evt.date,
       tags: evt.tags.map(function (tag) { 
         return id ? tag : capitalize(tag.name); 
       }).join(', ')
@@ -296,4 +356,10 @@ function capitalize (str) {
   });
 }
 
+function toDollars (price) {
+  var priceStr = "";
+  if (!price) priceStr = "N/A";
+  else for (var i = price; i > 0; i--) priceStr = priceStr + "$";
+  return priceStr;
+}
 module.exports = router;

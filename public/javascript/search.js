@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
   });
 
   byEventLink.addEventListener('click', function() {
-    searchBy = searchByGift;
+    searchBy = searchByEvent;
     byEventLink.className = "bold";
     byTagLink.className = "";
     byUserLink.className = "";
@@ -99,6 +99,21 @@ document.addEventListener("DOMContentLoaded", function(event) {
     req.send();
   }
 
+  function searchByEvent(search_query) {
+    var req = new XMLHttpRequest();
+    var url = '/search/event_results?search_query=' + search_query || "";
+    req.open('GET', url, true);
+
+    req.addEventListener('load', function() {
+      if (req.status >= 200 && req.status < 400) {
+        var data = JSON.parse(req.responseText);
+        listEvents(data);
+      }
+    });
+
+    req.send();
+  }
+
   function listResults (resultList) {
     var results = document.getElementById('results');
     if (resultList.length == 0) results.innerHTML = "<p>No results found.</p>";
@@ -130,6 +145,26 @@ document.addEventListener("DOMContentLoaded", function(event) {
             '<td><a href="/user/' + result.username + '">' + result.username + '</a></td>' +
             '<td>' + result.name + '</td>' +
             '<td>' + result.email + '</td>' +
+            '</tr>');
+      });
+      html.push('</table>');
+      results.innerHTML = html.join("");
+    }
+  }
+
+  function listEvents (resultList) {
+    var results = document.getElementById('results');
+    if (resultList.length == 0) results.innerHTML = "<p>No results found.</p>";
+    else {
+      var html = [];
+      html.push('<p>Click on an event to learn more!</p>');
+      html.push('<table><tr><td>Event</td><td>Date</td><td>Tags</td></tr>');
+      resultList.forEach(function (result) {
+        console.log(result);
+        html.push('<tr>' + 
+            '<td><a href="">' + result.name + '</a></td>' +
+            '<td>' + result.date + '</td>' +
+            '<td>' + parseTags(result.tags) + '</td>' +
             '</tr>');
       });
       html.push('</table>');

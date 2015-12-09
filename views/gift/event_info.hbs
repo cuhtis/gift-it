@@ -1,0 +1,36 @@
+<div class="body">
+<h4>{{evt.name}}</h4>
+
+<div class="search_results">
+<table>
+  <tr>
+    <td>Event</td>
+    <td>Date</td>
+    <td>Tags</td>
+  </tr>
+  <tr>
+    <td>{{evt.name}}</td>
+    <td>{{evt.date}}</td>
+    <td>{{evt.tags}}</td>
+  </tr>
+</table>
+</div>
+<h4>Gifts</h4>
+<div class="search_results">
+<table>
+  <tr>
+    <td>Gift</td>
+    <td>Price</td>
+    <td>Tags</td>
+  </tr>
+  {{#each gift}}
+  <tr>
+    <td><a href="/gift/info?id={{this.id}}">{{this.name}}</a></td>
+    <td>{{this.price}}</td>
+    <td>{{this.tags}}</td>
+  </tr>
+  {{/each}}
+</table>
+</div>
+
+</div>

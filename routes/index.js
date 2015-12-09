@@ -140,6 +140,14 @@ router.get('/logout', function(req, res, next) {
   res.redirect('/');
 });
 
+router.get('/help', function(req, res, next) {
+  // Render page
+  res.render('help', {
+    title: "Help",
+    page_title: "Help"
+  });
+});
+
 router.get('/settings', function(req, res, next) {
   // Must be logged in
   if (!req.user) res.redirect('/login');

@@ -41,8 +41,8 @@
     </tr>
     {{#each events}}
     <tr>
-      <td><a href="">{{this.name}}</a></td>
-      <td>{{#if this.date}}{{this.datee}}{{else}}N/A{{/if}}</td>
+      <td><a href="/gift/event_info?id={{this.id}}">{{this.name}}</a></td>
+      <td>{{#if this.date}}{{this.date}}{{else}}N/A{{/if}}</td>
       <td>{{#if this.tags}}{{this.tags}}{{else}}N/A{{/if}}</td>
       <td><a class="rem_link" id="{{this.id}}">Remove</a></td>
     </tr>

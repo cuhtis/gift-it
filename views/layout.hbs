@@ -9,7 +9,7 @@
     <div class="container">
       <div id="user_info">
         {{#if user}}
-        Logged in as {{user.first_name}} {{user.last_name}} (<a href="/logout">Logout</a>) 
+        Logged in as <a href="/user" class="bold">{{user.first_name}} {{user.last_name}}</a> (<a href="/logout">Logout</a>) 
         {{else}}
         <a href="/login">Login</a>&emsp;<a href="/register">Register</a>
         {{/if}}
@@ -20,7 +20,7 @@
       {{#if show_nav}}
       <div id="nav">
         <p>
-        <a href="/">Home</a>&emsp;<a href="/user">My Account</a>&emsp;<a href="/gift">My Gifts</a>&emsp;<a href="/search">Search</a>&emsp;<a href="/settings">Settings</a>
+        <a href="/">Home</a>&emsp;<a href="/user">Account</a>&emsp;<a href="/gift">Gifts</a>&emsp;<a href="/search">Search</a>&emsp;<a href="/help">Help</a>&emsp;<a href="/settings">Settings</a>
         </p>
       </div>
       {{/if}}

@@ -10,8 +10,8 @@ var Event = mongoose.model('Event');
 router.get('/', function(req, res, next) {
   // Render page
   res.render('search/gift', {
-    title: 'Search Gifts',
-    page_title: 'Search Gifts'
+    title: 'Search',
+    page_title: 'Search'
   });
 });
 

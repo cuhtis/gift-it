@@ -56,6 +56,7 @@ app.use(function(req, res, next){
   res.locals.user = req.user;
   res.locals.main = false;
   res.locals.show_nav = true;
+  console.log(req.body);
   next();
 });
 
