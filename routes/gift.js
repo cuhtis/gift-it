@@ -13,15 +13,11 @@ router.get('/', function(req, res, next) {
   if (!req.user) res.redirect('/login');
   else {
     // Find gifts
-    Gift.find({
-      '_id': { $in: req.user.giftlist } 
-    }).populate('tags').exec(function (err, gifts) {
+    getGiftList (req.user.giftlist, true, function (err, gifts) {
       if (err) { console.log(err); return res.send(500, 'Database error.'); }
 
       // Find events
-      Event.find({
-        '_id': { $in: req.user.eventlist }
-      }).populate('tags').exec(function (err, events) {
+      getEventList (req.user.eventlist, true, function (err, events) {
         if (err) { console.log(err); return res.send(500, 'Database error.'); }
 
         // Render page
@@ -40,11 +36,16 @@ router.get('/add', function(req, res, next) {
   // Must be logged in
   if (!req.user) res.redirect('/login');
   else {
-    // Render page
-    res.render('gift/gift_add', {
-      title: "Add Gift",
-      page_title: "Add Gift",
-      show_nav: false
+    getEventList(req.user.eventlist, false, function (err, events) {
+      if (err) { console.log(err); return res.send(500, 'Database error.'); }
+    
+      // Render page
+      res.render('gift/gift_add', {
+        title: "Add Gift",
+        page_title: "Add Gift",
+        show_nav: false,
+        events: parseEvents(events, true)
+      });
     });
   }
 });
@@ -197,11 +198,17 @@ router.get('/info', function(req, res, next) {
 
 /** Helper Functions **/
 
-function getGiftList (list, callback) {
+function getGiftList (list, tags, callback) {
   // Find gifts
-  Gift.find({
+  var query = Gift.find({
     '_id': { $in: list } 
-  }).populate('tags').exec(function (err, gifts) {
+  });
+  
+  // Optionally populate tags
+  if (tags) query.populate('tags');
+    
+  // Run query
+  query.exec(function (err, gifts) {
     if (err) { console.log(err); return res.send(500, 'Database error.'); }
     
     // Continue calls
@@ -209,7 +216,25 @@ function getGiftList (list, callback) {
   });
 }
 
-function parseGifts (gifts) {
+function getEventList (list, tags, callback) {
+  // Find gifts
+  var query = Event.find({
+    '_id': { $in: list } 
+  });
+  
+  // Optionally populate tags
+  if (tags) query.populate('tags');
+  
+  // Run query
+  query.exec(function (err, evts) {
+    if (err) { console.log(err); return res.send(500, 'Database error.'); }
+    
+    // Continue calls
+    callback.call(this, err, evts);
+  });
+}
+
+function parseGifts (gifts, id) {
   return gifts.map(function (gift) {
     // Create price string
     var priceStr = "";
@@ -221,18 +246,22 @@ function parseGifts (gifts) {
       id: gift._id,
       name: capitalize(gift.name),
       price: priceStr,
-      tags: gift.tags.map(function (tag) { return capitalize(tag.name); }).join(', ')
+      tags: gift.tags.map(function (tag) { 
+        return id ? tag : capitalize(tag.name); 
+      }).join(', ')
     };
   });
 }
 
-function parseEvents (events) {
+function parseEvents (events, id) {
   return events.map(function (evt) {
     // Return parsed event object
     return {
       id: evt._id,
       name: capitalize(evt.name),
-      tags: evt.tags.map(function (tag) { return capitalize(tag.name); }).join(', ')
+      tags: evt.tags.map(function (tag) { 
+        return id ? tag : capitalize(tag.name); 
+      }).join(', ')
     };
   })
 }
