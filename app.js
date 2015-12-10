@@ -14,7 +14,7 @@ require('./db/db');
 require('./auth');
 
 // Schedule
-requier('./schedule');
+require('./schedule');
 
 // Routes
 var routes = require('./routes/index');

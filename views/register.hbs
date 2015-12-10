@@ -1,35 +1,36 @@
+<script src="/javascript/register.js"></script>
 <div class="body">
-<h4 class="error">{{ message }}</h4>
-<form method="POST">
+<h4 id="message" class="error">{{ message }}</h4>
+<form method="POST" name="form" id="form">
   <div class="box">
     <p>
       <label for="username">Username:</label>
-      <input name="username" type="text" required>
+      <input name="username" type="text">
     </p>
     <p>
       <label for="password">Password:</label>
-      <input name="password" type="password" required>
+      <input name="password" type="password">
     </p>
     <p>
       <label for="verify_password">Verify Password:</label>
-      <input name="verify_password" type="password" required>
+      <input name="verify_password" type="password">
     </p>
     <br>
     <p>
       <label for="first_name">First Name:</label>
-      <input name="first_name" type="text" required>
+      <input name="first_name" type="text">
     </p>
     <p>
       <label for="last_name">Last Name:</label>
-      <input name="last_name" type="text" required>
+      <input name="last_name" type="text">
     </p>
     <p>
       <label for="email">Email:</label>
-      <input name="email" type="email" required>
+      <input name="email" type="email">
     </p>
     <p>
       <label for="birthday">Date of Birth:</label>
-      <input name="birthday" type="date" required>
+      <input name="birthday" type="date">
     </p>
   </div>
   <br>

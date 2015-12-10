@@ -78,7 +78,6 @@ router.get('/register', function(req, res, next) {
   else {
     // Display error message
     var error = "";
-    if (req.query.error === "verify_pw") error = error + "Passwords must match. ";
     if (req.query.error === "invalid") error = error + "Your registration information is invalid. ";
 
     // Render page
@@ -95,10 +94,16 @@ router.post('/register', function(req, res, next) {
   // Cannot be logged in
   if (req.user) res.redirect('/');
   else {
-    // Verify password
-    // FIXME: move to client-side
-    if (req.body.password !== req.body.verify_password) {
-      res.redirect('/register?error=verify_pw');
+    // Verify input
+    if(req.body.username.match(/^[a-zA-Z0-9]+$/) == null
+        || req.body.password.match(/^[a-zA-Z0-9]+$/) == null
+        || req.body.password !== req.body.verify_password
+        || req.body.first_name.match(/^[a-zA-Z]+$/) == null
+        || req.body.last_name.match(/^[a-zA-Z]+$/) == null
+        || req.body.email.match(/^[a-zA-Z0-9]+@[a-zA-Z0-9]+$/) == null
+        || req.body.birthday.match == null || req.body.birthday == ""
+        || new Date(req.body.birthday) > new Date()) {
+      res.redirect('/register?error=invalid');
       return;
     }
 
