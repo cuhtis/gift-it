@@ -45,7 +45,11 @@ function checkEvents () {
 
       // Get dates of user's events
       var dates = user.eventlist.map(function(evt) { 
-        return new Date(evt.date); 
+        return {
+          'date': new Date(evt.date),
+          'evt': evt.name,
+          'id': evt._id
+        }
       });
 
       // Calculate the date difference from today
@@ -53,7 +57,20 @@ function checkEvents () {
         var diff = Math.floor((today - date)/(1000 * 3600 * 24));
         if (diff == user.options.notify_time) {
           // Send an email to remind the user
-          console.log("Send email");
+          transporter.sendMail({
+            from: 'gift.it.no.reply@gmail.com',
+            to: user.email,
+            subject: 'Reminder! You have an event coming up...',
+            template: 'reminder',
+            context: {
+              name: user.first_name,
+              evt_name: dates.evt,
+              evt_id: dates.id
+            }
+          }, function (err, info) {
+            if (err) return console.log(error);
+            console.log('Message sent', info.response);
+          });
         }
       });
     });
